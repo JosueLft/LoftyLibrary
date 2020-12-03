@@ -1,0 +1,24 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:colorBackground">@color/bgColor</item>
+        <item name="android:textColor">@color/txtColor</item>
+        <item name="customDimension">@dimen/cardview_default_radius</item>
+    </style>
+
+    <style name="StyleInputText">
+        <item name="colorControlNormal">#BEFF6900</item> <!-- Cor padrão da linha -->
+        <item name="colorControlActivated">#0C1A6E</item> <!-- Cor linha e texto quando recebe foco -->
+    </style>
+
+    <style name="StylesTilEditText">
+        <item name="android:theme">@style/StyleInputText</item>
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:textColorHint">#FF5722</item> <!-- Cor texto(hint) sem foco -->
+    </style>
+
+</resources>

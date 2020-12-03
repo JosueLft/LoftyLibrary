@@ -1,0 +1,122 @@
+{
+  "project_info": {
+    "project_number": "1070624061127",
+    "firebase_url": "https://loftylibrary-116b9.firebaseio.com",
+    "project_id": "loftylibrary-116b9",
+    "storage_bucket": "loftylibrary-116b9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1070624061127:android:704ea3df97b9f86ee470e2",
+        "android_client_info": {
+          "package_name": "br.com.reign.loftylibrary"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1070624061127-srrdmrelt7fsk6p6aga5b7m3m398539k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.com.reign.loftylibrary",
+            "certificate_hash": "6baa8b4a61db5c10390dca40b8c31c5c1fcacb6e"
+          }
+        },
+        {
+          "client_id": "1070624061127-dh8bm4uhoubm1t6rmivdgjils29hc9r8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-ulpf8ij1mdlSEzkUo51QaAl2n2YTIeM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1070624061127-dh8bm4uhoubm1t6rmivdgjils29hc9r8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1070624061127:android:bdfb9a2ba3539fd5e470e2",
+        "android_client_info": {
+          "package_name": "br.com.reign.loftylibraryadm"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1070624061127-k4cshlp7gq7iihgqvuaendpi8s32oq6d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.com.reign.loftylibraryadm",
+            "certificate_hash": "6baa8b4a61db5c10390dca40b8c31c5c1fcacb6e"
+          }
+        },
+        {
+          "client_id": "1070624061127-dh8bm4uhoubm1t6rmivdgjils29hc9r8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-ulpf8ij1mdlSEzkUo51QaAl2n2YTIeM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1070624061127-dh8bm4uhoubm1t6rmivdgjils29hc9r8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1070624061127:android:71add0f56e6a342ae470e2",
+        "android_client_info": {
+          "package_name": "br.com.reign.loftylibraryadmin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1070624061127-84vb386fuubgad7knjh8monbqu1qjtsi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.com.reign.loftylibraryadmin",
+            "certificate_hash": "6baa8b4a61db5c10390dca40b8c31c5c1fcacb6e"
+          }
+        },
+        {
+          "client_id": "1070624061127-dh8bm4uhoubm1t6rmivdgjils29hc9r8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-ulpf8ij1mdlSEzkUo51QaAl2n2YTIeM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1070624061127-dh8bm4uhoubm1t6rmivdgjils29hc9r8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

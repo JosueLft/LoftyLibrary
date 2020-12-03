@@ -1,0 +1,43 @@
+<resources>
+    <string name="app_name">Lofty Library 0.1.4</string>
+
+    <!-- Main Activity Menu Icons -->
+    <string name="txtNovelsIcon">Novels</string>
+    <string name="txtMangasIcon">Mangas</string>
+    <string name="txtCatalogIcon">Catálogo</string>
+    <string name="txtLibraryIcon">Biblioteca</string>
+    <string name="txtConfigIcon">Configurações</string>
+
+    <!-- Home Posts -->
+    <string name="txtWorkTitle">Work Title</string>
+    <string name="btnReadPost">Ler</string>
+    <string name="btnIndexPost">Indice</string>
+
+    <!-- Catalogo -->
+    <string name="txtSearchWork">Informe o nome da obra</string>
+    <string name="txtWorkGenre">Genero</string>
+    <string name="txtOrigin">Traduzido por</string>
+    <string name="txtDescriptionCover">Capa da obra</string>
+
+    <!-- indice -->
+    <string name="txtSynopsis">Sinopse</string>
+    <string name="txtChapterList">Capítulos</string>
+    <string name="txtAboutWork">Sobre</string>
+    <string name="txtWorkType">Tipo</string>
+    <string name="txtWorkStatus">Status</string>
+
+    <!-- Manga Content -->
+    <string name="txtDescriptionPage">Pagina de um manga</string>
+    <string name="txtChapterTitle">Chapter Title</string>
+    <string name="txtRecentLibrary">Lido Recentemente</string>
+    <string name="txtFollowingLibrary">Lendo</string>
+    <string name="txtLastChapterLibrary">Ultimo Capitulo Lido</string>
+    <string name="txtCoverDescription">Cover</string>
+    <string name="txtNotRegister">Nenhuma obra cadastrada</string>
+
+    <!-- Splash Screen -->
+    <string name="txtDesigner"><![CDATA[Multi_A&R]]></string>
+    <string name="txtProduced">Produced By</string>
+    <string name="txtDateChapter">Date</string>
+    <string name="txtTotal">Total:</string>
+</resources>

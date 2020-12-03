@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#474545</color>
+    <color name="colorPrimaryDark">#393838</color>
+    <color name="colorAccent">#FF5722</color>
+    <color name="bgColor">#303030</color>
+    <color name="bgMenuColor">#393838</color>
+    <color name="txtMenuColor">#FF5722</color>
+    <color name="txtColor">#FFF</color>
+    <color name="AboutColorText">#E4605E</color>
+    <color name="chaptersAlreadyRead">#8787</color>
+</resources>
