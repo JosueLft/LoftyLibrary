@@ -4,12 +4,15 @@
     android:id="@+id/llWork"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="12dp">
+    android:layout_margin="12dp"
+    android:background="@drawable/colored_border"
+    android:padding="3dp">
 
     <androidx.cardview.widget.CardView
         style="@style/CardView.Dark"
         android:layout_width="150dp"
-        android:layout_height="150dp">
+        android:layout_height="150dp"
+        app:cardCornerRadius="15dp">
 
         <ImageView
             android:id="@+id/workCover"

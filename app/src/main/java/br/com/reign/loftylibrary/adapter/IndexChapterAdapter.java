@@ -55,25 +55,17 @@ public class IndexChapterAdapter extends RecyclerView.Adapter<IndexChapterAdapte
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView txtWorkChapterTitle;
-        Button btnDownloadChapter;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             txtWorkChapterTitle = itemView.findViewById(R.id.chaptersIndex);
-            btnDownloadChapter = itemView.findViewById(R.id.btnDownloadChapter);
         }
         public TextView getTxtWorkChapterTitle() {
             return txtWorkChapterTitle;
         }
         public void setTxtWorkChapterTitle(TextView txtWorkChapterTitle) {
             this.txtWorkChapterTitle = txtWorkChapterTitle;
-        }
-        public Button getBtnDownloadChapter() {
-            return btnDownloadChapter;
-        }
-        public void setBtnDownloadChapter(Button btnDownloadChapter) {
-            this.btnDownloadChapter = btnDownloadChapter;
         }
     }
 }
