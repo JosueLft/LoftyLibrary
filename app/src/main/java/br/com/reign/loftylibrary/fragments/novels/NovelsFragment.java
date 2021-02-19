@@ -99,7 +99,7 @@ public class NovelsFragment extends Fragment {
         initializeComponents(view);
         readChapter(view);
 
-        switchLayout();
+//        switchLayout();
 
         return view;
     }
@@ -112,7 +112,7 @@ public class NovelsFragment extends Fragment {
         // Switch
         switchLayout = view.findViewById(R.id.switchLayout);
 
-        adapter = new HomePostAdapter(postItems, getActivity(), view, layout);
+//        adapter = new HomePostAdapter(postItems, getActivity(), view, layout);
 
         recyclerPost.setAdapter(adapter);
 
@@ -210,20 +210,20 @@ public class NovelsFragment extends Fragment {
         ));
     }
 
-    public void switchLayout() {
-        switchLayout.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(compoundButton.isChecked()) {
-                    layout = "Card";
-                    adapter = new HomePostAdapter(postItems, getActivity(), getView(), layout);
-                    recyclerPost.setAdapter(adapter);
-                } else {
-                    layout = "Painel";
-                    adapter = new HomePostAdapter(postItems, getActivity(), getView(), layout);
-                    recyclerPost.setAdapter(adapter);
-                }
-            }
-        });
-    }
+//    public void switchLayout() {
+//        switchLayout.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                if(compoundButton.isChecked()) {
+//                    layout = "Card";
+//                    adapter = new HomePostAdapter(postItems, getActivity(), getView(), layout);
+//                    recyclerPost.setAdapter(adapter);
+//                } else {
+//                    layout = "Painel";
+//                    adapter = new HomePostAdapter(postItems, getActivity(), getView(), layout);
+//                    recyclerPost.setAdapter(adapter);
+//                }
+//            }
+//        });
+//    }
 }

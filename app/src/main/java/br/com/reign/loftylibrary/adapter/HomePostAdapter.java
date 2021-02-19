@@ -22,13 +22,12 @@ public class HomePostAdapter extends RecyclerView.Adapter<HomePostAdapter.ViewHo
 
     private List<Post> listPost;
     private Context context;
-    private View view;
+
     private String layout;
 
-    public HomePostAdapter(List<Post> listPosts, Context context, View view, String layout) {
+    public HomePostAdapter(List<Post> listPosts, Context context, String layout) {
         this.listPost = listPosts;
         this.context = context;
-        this.view = view;
         this.layout = layout;
     }
 

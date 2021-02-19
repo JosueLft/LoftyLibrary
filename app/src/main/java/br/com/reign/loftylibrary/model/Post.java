@@ -56,7 +56,7 @@ public class Post {
     }
 
     public String date() {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyy HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         String d = sdf.format(date);
         return d;
     }

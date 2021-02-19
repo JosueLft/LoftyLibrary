@@ -103,7 +103,7 @@ public class MangasFragment extends Fragment {
 
         initializeComponents(view);
         readChapter(view);
-        switchLayout();
+//        switchLayout();
 
         return view;
     }
@@ -117,7 +117,7 @@ public class MangasFragment extends Fragment {
         switchLayout = view.findViewById(R.id.switchLayout);
 
         // Adapters
-        adapter = new HomePostAdapter(postItems, getActivity(), view, layout);
+//        adapter = new HomePostAdapter(postItems, getActivity(), view, layout);
 
         recyclerPost.setAdapter(adapter);
 
@@ -126,22 +126,22 @@ public class MangasFragment extends Fragment {
         content.execute();
     }
 
-    public void switchLayout() {
-        switchLayout.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(compoundButton.isChecked()) {
-                    layout = "Card";
-                    adapter = new HomePostAdapter(postItems, getActivity(), getView(), layout);
-                    recyclerPost.setAdapter(adapter);
-                } else {
-                    layout = "Painel";
-                    adapter = new HomePostAdapter(postItems, getActivity(), getView(), layout);
-                    recyclerPost.setAdapter(adapter);
-                }
-            }
-        });
-    }
+//    public void switchLayout() {
+//        switchLayout.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                if(compoundButton.isChecked()) {
+//                    layout = "Card";
+//                    adapter = new HomePostAdapter(postItems, getActivity(), getView(), layout);
+//                    recyclerPost.setAdapter(adapter);
+//                } else {
+//                    layout = "Painel";
+//                    adapter = new HomePostAdapter(postItems, getActivity(), getView(), layout);
+//                    recyclerPost.setAdapter(adapter);
+//                }
+//            }
+//        });
+//    }
 
     // remover posteriormente
     private class Content extends AsyncTask<Void, Void, Void> {

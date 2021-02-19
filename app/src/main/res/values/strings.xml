@@ -10,8 +10,6 @@
 
     <!-- Home Posts -->
     <string name="txtWorkTitle">Work Title</string>
-    <string name="btnReadPost">Ler</string>
-    <string name="btnIndexPost">Indice</string>
 
     <!-- Catalogo -->
     <string name="txtSearchWork">Informe o nome da obra</string>
@@ -24,7 +22,6 @@
     <string name="txtChapterList">Capítulos</string>
     <string name="txtAboutWork">Sobre</string>
     <string name="txtWorkType">Tipo</string>
-    <string name="txtWorkStatus">Status</string>
 
     <!-- Manga Content -->
     <string name="txtDescriptionPage">Pagina de um manga</string>
@@ -33,7 +30,6 @@
     <string name="txtFollowingLibrary">Lendo</string>
     <string name="txtLastChapterLibrary">Ultimo Capitulo Lido</string>
     <string name="txtCoverDescription">Cover</string>
-    <string name="txtNotRegister">Nenhuma obra cadastrada</string>
 
     <!-- Splash Screen -->
     <string name="txtDesigner"><![CDATA[Multi_A&R]]></string>

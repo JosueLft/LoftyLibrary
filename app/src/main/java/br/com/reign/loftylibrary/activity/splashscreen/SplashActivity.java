@@ -15,9 +15,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import br.com.reign.loftylibrary.R;
-import br.com.reign.loftylibrary.activity.MainActivity;
+import br.com.reign.loftylibrary.activity.manga.MangaActivity;
 
-public class SplashsActivity extends AppCompatActivity {
+public class SplashActivity extends AppCompatActivity {
     //initialize variable
     ImageView ivTop, ivLogo, ivWave, ivBottom;
     TextView appName;
@@ -29,7 +29,7 @@ public class SplashsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splashs);
+        setContentView(R.layout.activity_splash);
 
         //Assign variable
         ivTop = findViewById(R.id.iv_top);
@@ -79,8 +79,8 @@ public class SplashsActivity extends AppCompatActivity {
             @Override
             public void run() {
                 //Redirect to main activity
-                startActivity(new Intent(SplashsActivity.this,
-                        MainActivity.class)
+                startActivity(new Intent(SplashActivity.this,
+                        MangaActivity.class)
                 .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 //Finish activity
                 finish();

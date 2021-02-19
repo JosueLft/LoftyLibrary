@@ -13,7 +13,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.splashscreen.SplashsActivity">
+        <activity android:name=".activity.manga.MangaActivity">
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="user"
+        </activity>
+        <activity android:name=".activity.splashscreen.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -22,17 +26,11 @@
         </activity>
         <activity android:name=".fragments.config.SettingsActivity" />
         <activity android:name=".utils.ComentsActivity" />
-        <activity android:name=".activity.SplashActivity">
-
-        </activity>
         <!--
         configChanges: impede que a activity invoque o metodo onCreate e perca os dados
         screenOrientation: configura para que o app alterne entre tipos de visualização
         -->
-        <activity
-            android:name=".activity.MainActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="user" /> <!-- Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713 -->
+        <!-- Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713 -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-3940256099942544~3347511713" />

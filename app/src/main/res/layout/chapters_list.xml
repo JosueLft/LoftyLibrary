@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/llChapterTitle"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/txtChapterTitleNumber"
+        android:layout_width="150px"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25px"
+        android:layout_marginTop="5px"
+        android:layout_marginBottom="5px"
+        android:layout_weight="0"
+        android:background="@drawable/chapter_border"
+        android:gravity="center_vertical"
+        android:paddingLeft="5px"
+        android:paddingTop="25px"
+        android:paddingRight="5px"
+        android:paddingBottom="25px"
+        android:text="@string/txtChapterTitle"
+        android:textAlignment="center"
+        android:textColor="@color/txtColor"
+        android:textSize="12sp"
+        android:textStyle="bold" />
+</LinearLayout>

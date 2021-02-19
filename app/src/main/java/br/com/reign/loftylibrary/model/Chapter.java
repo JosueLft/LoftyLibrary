@@ -1,5 +1,7 @@
 package br.com.reign.loftylibrary.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class Chapter {
@@ -12,6 +14,7 @@ public class Chapter {
     private String translatedBy;
     private int pageNumber;
     private String type;
+    private List<Chapter> listChapters = new ArrayList<Chapter>();
 
     public Chapter() {}
 
