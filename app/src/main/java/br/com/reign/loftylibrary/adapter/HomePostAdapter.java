@@ -1,6 +1,7 @@
 package br.com.reign.loftylibrary.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,8 +71,8 @@ public class HomePostAdapter extends RecyclerView.Adapter<HomePostAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-//        return listPost.size();
-        return listPost.size();
+        Log.i("Conta", "Resultado: " + (listPost.size() - (listPost.size() * 97/100)));
+        return listPost.size() - (listPost.size() * 97/100);
     }
 
     //criando uma inner class
