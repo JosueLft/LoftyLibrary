@@ -25,17 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.reign.loftylibrary.R;
+import br.com.reign.loftylibrary.activity.account.LoginActivity;
 import br.com.reign.loftylibrary.adapter.HomePostAdapter;
-import br.com.reign.loftylibrary.fragments.catalog.CatalogFragment;
-import br.com.reign.loftylibrary.fragments.config.SettingsActivity;
-import br.com.reign.loftylibrary.fragments.index.IndexFragment;
-import br.com.reign.loftylibrary.fragments.index.internal.AboutFragment;
-import br.com.reign.loftylibrary.fragments.index.internal.ChaptersFragment;
-import br.com.reign.loftylibrary.fragments.library.LibraryFragment;
-import br.com.reign.loftylibrary.fragments.mangas.MangasFragment;
-import br.com.reign.loftylibrary.fragments.mangas.ReadMangaChapterFragment;
-import br.com.reign.loftylibrary.fragments.novels.NovelsFragment;
-import br.com.reign.loftylibrary.fragments.novels.ReadNovelFragment;
 import br.com.reign.loftylibrary.model.MangaChapter;
 import br.com.reign.loftylibrary.model.Post;
 import br.com.reign.loftylibrary.utils.CompareChapterByDate;
@@ -84,6 +75,7 @@ public class MangaActivity<CatalogFragment> extends AppCompatActivity {
         openCatalog();
         openLibrary();
         openSettings();
+        menu.selectMenu(txtMangasIcon, components);
     }
 
     private void initializeComponents() {
@@ -187,8 +179,8 @@ public class MangaActivity<CatalogFragment> extends AppCompatActivity {
         imgSettingsIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
-//                startActivity(intent);
+                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(intent);
                 menu.selectMenu(txtSettingsIcon, components);
             }
         });

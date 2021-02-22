@@ -32,8 +32,17 @@
     <string name="txtCoverDescription">Cover</string>
 
     <!-- Splash Screen -->
-    <string name="txtDesigner"><![CDATA[Multi_A&R]]></string>
-    <string name="txtProduced">Produced By</string>
     <string name="txtDateChapter">Date</string>
     <string name="txtTotal">Total:</string>
+
+    <!-- Settings/Login -->
+    <string name="txtLogin">Login</string>
+    <string name="txtRegisterAccount">Cadastro</string>
+    <string name="txtName">Digite seu nome</string>
+    <string name="txtEmail">Digite seu E-mail</string>
+    <string name="txtPassword">Digite sua senha</string>
+    <string name="txtCreateAccount">Não possui conta? Criar Conta!</string>
+    <string name="btnRegister">Cadastrar</string>
+    <string name="btnImage">Foto</string>
+
 </resources>
