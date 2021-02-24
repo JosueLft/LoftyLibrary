@@ -102,7 +102,7 @@ public class MangasFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_mangas, container, false);
 
         initializeComponents(view);
-        readChapter(view);
+        readChapter();
 //        switchLayout();
 
         return view;
@@ -189,7 +189,7 @@ public class MangasFragment extends Fragment {
         };
     }
 
-    private void readChapter(View view) {
+    private void readChapter() {
         recyclerPost.addOnItemTouchListener(new RecyclerItemClickListener(
                 getActivity().getApplicationContext(),
                 recyclerPost,

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -34,7 +33,7 @@ public class LastChapterAdapter extends RecyclerView.Adapter<LastChapterAdapter.
         View itemList = LayoutInflater
                 .from(parent.getContext())
                 .inflate(
-                        R.layout.library_last_read_chapter,
+                        R.layout.library_works,
                         parent,
                         false
                 );

@@ -35,7 +35,7 @@ public class MangaChapterAdapter extends RecyclerView.Adapter<MangaChapterAdapte
         View itemChapterList = LayoutInflater
                 .from(parent.getContext())
                 .inflate(
-                        R.layout.manga_chapter,
+                        R.layout.manga_pages,
                         parent,
                         false
                 );

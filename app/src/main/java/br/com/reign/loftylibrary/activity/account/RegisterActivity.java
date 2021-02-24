@@ -24,6 +24,8 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -32,6 +34,8 @@ import java.io.IOException;
 import java.util.UUID;
 
 import br.com.reign.loftylibrary.R;
+import br.com.reign.loftylibrary.activity.settings.SettingsActivity;
+import br.com.reign.loftylibrary.model.User;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -112,15 +116,11 @@ public class RegisterActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()) {
-                            txtRegisterName.setText("");
-                            txtRegisterEmail.setText("");
-                            txtRegisterPassword.setText("");
                             Toast.makeText(
                                     getApplicationContext(),
-                                    "Registrado com sucesso!",
+                                    "Realizando registro, por favor aguarde!",
                                     Toast.LENGTH_LONG
                             ).show();
-
                             saveUserInFirebase();
                         }
                     }
@@ -151,6 +151,45 @@ public class RegisterActivity extends AppCompatActivity {
                             @Override
                             public void onSuccess(Uri uri) {
                                 Log.i("RegisterInformation", uri.toString());
+
+                                String id = FirebaseAuth.getInstance().getUid();
+                                String name = txtRegisterName.getText().toString();
+                                String profileUrl = uri.toString();
+
+                                User user = new User(id, name, profileUrl);
+
+                                FirebaseFirestore
+                                        .getInstance()
+                                        .collection("users")
+                                        .document(id)
+                                        .set(user)
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                Intent intent = new Intent(RegisterActivity.this, SettingsActivity.class);
+                                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                startActivity(intent);
+                                                Toast.makeText(
+                                                        getApplicationContext(),
+                                                        "Cadastro realizado com sucesso!!",
+                                                        Toast.LENGTH_LONG
+                                                ).show();
+                                                Toast.makeText(
+                                                        getApplicationContext(),
+                                                        "Seja Bem-vindo " + txtRegisterName.getText().toString() + "!!",
+                                                        Toast.LENGTH_LONG
+                                                ).show();
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Log.e("RegisterError", e.getMessage(), e);
+                                            }
+                                        });
+                                txtRegisterName.setText("");
+                                txtRegisterEmail.setText("");
+                                txtRegisterPassword.setText("");
                             }
                         });
                     }

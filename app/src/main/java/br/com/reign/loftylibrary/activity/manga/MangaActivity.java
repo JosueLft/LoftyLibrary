@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -25,12 +26,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.reign.loftylibrary.R;
-import br.com.reign.loftylibrary.activity.account.LoginActivity;
+import br.com.reign.loftylibrary.activity.catalog.CatalogActivity;
+import br.com.reign.loftylibrary.activity.library.LibraryActivity;
+import br.com.reign.loftylibrary.activity.novel.NovelActivity;
+import br.com.reign.loftylibrary.activity.settings.SettingsActivity;
 import br.com.reign.loftylibrary.adapter.HomePostAdapter;
 import br.com.reign.loftylibrary.model.MangaChapter;
 import br.com.reign.loftylibrary.model.Post;
 import br.com.reign.loftylibrary.utils.CompareChapterByDate;
 import br.com.reign.loftylibrary.utils.MenuSelect;
+import br.com.reign.loftylibrary.utils.RecyclerItemClickListener;
 
 public class MangaActivity<CatalogFragment> extends AppCompatActivity {
 
@@ -40,16 +45,13 @@ public class MangaActivity<CatalogFragment> extends AppCompatActivity {
     private DatabaseReference dbProject;
     private DatabaseReference dbReference = FirebaseDatabase.getInstance().getReference();
     private ValueEventListener listenerMangas;
-    MenuSelect menu = new MenuSelect();
-
     private String cover;
     private String chapterTitle;
     private String workTitle;
     private String dateChapter;
     private String layout = "Card";
     private Switch switchLayout;
-
-    // mangas section
+    MenuSelect menu = new MenuSelect();
     private TextView txtMangasIcon;
     private ImageView imgMangasIcon;
     private TextView txtNovelsIcon;
@@ -70,12 +72,12 @@ public class MangaActivity<CatalogFragment> extends AppCompatActivity {
 
         initializeComponents();
         loadContent();
-        openMangas();
         openNovels();
         openCatalog();
         openLibrary();
         openSettings();
         menu.selectMenu(txtMangasIcon, components);
+        readChapter();
     }
 
     private void initializeComponents() {
@@ -105,7 +107,7 @@ public class MangaActivity<CatalogFragment> extends AppCompatActivity {
         recyclerPost.setAdapter(adapter);
     }
 
-    public void loadContent() {
+    private void loadContent() {
         dbProject = dbReference.child("chapters").child("mangas");
         listenerMangas = new ValueEventListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
@@ -139,47 +141,77 @@ public class MangaActivity<CatalogFragment> extends AppCompatActivity {
         dbProject.addValueEventListener(listenerMangas);
     }
 
-    public void openMangas() {
-        imgMangasIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                menu.selectMenu(txtMangasIcon, components);
-            }
-        });
+    private void readChapter() {
+        recyclerPost.addOnItemTouchListener(new RecyclerItemClickListener(
+                this,
+                recyclerPost,
+                new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        HomePostAdapter.ViewHolder holder = new HomePostAdapter.ViewHolder(view);
+                        chapterTitle = String.valueOf(holder.getTxtChapterTitle().getText());
+                        workTitle = String.valueOf(holder.getTxtPostTitle().getText());
+                        dateChapter = String.valueOf(holder.getTxtDateChapter().getText());
+//                        comunication.invokeSelectedChapter("mangasFragment", "mangas", workTitle, chapterTitle);
+                        Intent intent = new Intent(getApplicationContext(), ReadMangaActivity.class);
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void onLongItemClick(View view, int position) {
+                        HomePostAdapter.ViewHolder holder = new HomePostAdapter.ViewHolder(view);
+                        chapterTitle = String.valueOf(holder.getTxtChapterTitle().getText());
+                        workTitle = String.valueOf(holder.getTxtPostTitle().getText());
+//                        comunication.captureTitle(workTitle, "mangas");
+                    }
+
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                    }
+                }
+        ));
     }
 
-    public void openNovels() {
+    private void openNovels() {
         imgNovelsIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), NovelActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
                 menu.selectMenu(txtNovelsIcon, components);
             }
         });
     }
-
-    public void openCatalog() {
+    private void openCatalog() {
         imgCatalogIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), CatalogActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
                 menu.selectMenu(txtCatalogIcon, components);
             }
         });
     }
-
-    public void openLibrary() {
+    private void openLibrary() {
         imgLibraryIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), LibraryActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
                 menu.selectMenu(txtLibraryIcon, components);
             }
         });
     }
-
-    public void openSettings(){
+    private void openSettings(){
         imgSettingsIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 menu.selectMenu(txtSettingsIcon, components);
             }

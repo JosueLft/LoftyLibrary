@@ -21,7 +21,6 @@ import android.widget.ZoomControls;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
@@ -128,7 +127,7 @@ public class ReadMangaChapterFragment extends Fragment {
     }
 
     public void initializeComponents(View view) {
-        rvMangaChapterContent = view.findViewById(R.id.rvMangaChapterContent);
+        rvMangaChapterContent = view.findViewById(R.id.MangaContent);
         rvMangaChapterContent.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         mangaChapterAdapter = new MangaChapterAdapter(chapterPages, getActivity());

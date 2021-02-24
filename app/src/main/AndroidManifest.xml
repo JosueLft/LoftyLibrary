@@ -13,7 +13,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.account.RegisterActivity"></activity>
+        <activity android:name=".activity.manga.ReadMangaActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.manga.MangaActivity" />
+        </activity>
+        <activity android:name=".activity.catalog.CatalogActivity"></activity>
+        <activity android:name=".activity.novel.NovelActivity" />
+        <activity android:name=".activity.library.LibraryActivity" />
+        <activity android:name=".activity.account.RegisterActivity" />
         <activity android:name=".activity.account.LoginActivity" />
         <activity android:name=".activity.manga.MangaActivity">
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -26,7 +34,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".fragments.config.SettingsActivity" />
+        <activity android:name=".activity.settings.SettingsActivity" />
         <activity android:name=".utils.ComentsActivity" />
         <!--
         configChanges: impede que a activity invoque o metodo onCreate e perca os dados
