@@ -62,7 +62,7 @@ public class MangaChapterAdapter extends RecyclerView.Adapter<MangaChapterAdapte
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            imgPageMangaChapter = itemView.findViewById(R.id.imgPageMangaChapter);
+            imgPageMangaChapter = itemView.findViewById(R.id.imgPages);
         }
 
         public ImageView getImgPageMangaChapter() {

@@ -8,9 +8,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
@@ -23,16 +24,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.xwray.groupie.Group;
 import com.xwray.groupie.GroupAdapter;
-import com.xwray.groupie.GroupieViewHolder;
-import com.xwray.groupie.Item;
 
 import java.util.ArrayList;
 
 import br.com.reign.loftylibrary.R;
 import br.com.reign.loftylibrary.adapter.MangaChapterAdapter;
-import br.com.reign.loftylibrary.controller.Comunication;
 import br.com.reign.loftylibrary.model.MangaChapter;
 import br.com.reign.loftylibrary.utils.SortPages;
 
@@ -41,17 +38,14 @@ public class ReadMangaActivity extends AppCompatActivity {
     private MangaChapterAdapter mangaChapterAdapter;
     private String chapterTitle;
     private String workTitle;
-    private String type;
-    private String cover;
     private RecyclerView rvMangaContent;
     private ArrayList<MangaChapter> chapterPages = new ArrayList<>();
     private ArrayList<MangaChapter> chapters = new ArrayList<>();
-    private GroupAdapter adapter;
 
     private Button btnNextChapter;
     private Button btnPreviousChapter;
     private Button btnAddLibrary;
-
+    private TextView txtCurrentChapterTitle;
     private int chapterIndex;
 
     // Firebase
@@ -68,13 +62,16 @@ public class ReadMangaActivity extends AppCompatActivity {
 
         initializeComponents();
         closeAds();
-        //loadContent(chapterTitle);
-
+        receivingChapter();
+        loadContent(chapterTitle);
+        nextChapter();
     }
 
     private void initializeComponents() {
+        txtCurrentChapterTitle = findViewById(R.id.txtCurrentChapterTitle);
         //RecyclerView
-        rvMangaContent = findViewById(R.id.MangaContent);
+        rvMangaContent = findViewById(R.id.rvMangaContent);
+        rvMangaContent.setLayoutManager(new LinearLayoutManager(this));
         //Adapter
         mangaChapterAdapter = new MangaChapterAdapter(chapterPages, this);
         rvMangaContent.setAdapter(mangaChapterAdapter);
@@ -89,6 +86,12 @@ public class ReadMangaActivity extends AppCompatActivity {
         adsPainel.setAdSize(AdSize.BANNER);
         adsPainel.setAdUnitId("ca-app-pub-3940256099942544/6300978111");
         initAdMob();
+    }
+
+    private void receivingChapter() {
+        workTitle = getIntent().getExtras().getString("WorkTitle");
+        chapterTitle = getIntent().getExtras().getString("ChapterTitle");
+        txtCurrentChapterTitle.setText(chapterTitle);
     }
 
     private void loadContent(final String chapterTitle) {
@@ -118,6 +121,80 @@ public class ReadMangaActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
+            }
+        });
+    }
+
+    private void nextChapter() {
+        dbReference = FirebaseDatabase.getInstance().getReference()
+                .child("chapters")
+                .child("mangas")
+                .child(workTitle);
+
+        dbReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                chapters.clear();
+                for(DataSnapshot data : dataSnapshot.getChildren()) {
+                    if(!(data.getKey().equalsIgnoreCase("cover")) && !(data.getKey().equalsIgnoreCase("currentDate"))) {
+                        chapters.add(new MangaChapter(data.getKey()));
+                    }
+                }
+
+                for(int i = 0; i < chapters.size(); i++) {
+                    if(chapters.get(i).getChapterTitle().equals(chapterTitle)) {
+                        chapterIndex = i;
+                    }
+                }
+                if(chapterIndex == (chapters.size() - 1)) {
+                    btnNextChapter.setVisibility(View.GONE);
+                } else if(chapterIndex == 0) {
+                    btnPreviousChapter.setVisibility(View.GONE);
+                } else if(chapterIndex < (chapters.size() - 1)){
+                    btnNextChapter.setVisibility(View.VISIBLE);
+                } else if(chapterIndex != 0){
+                    btnPreviousChapter.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+
+        btnNextChapter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                loadContent(chapters.get(chapterIndex + 1).getChapterTitle());
+                chapterIndex += 1;
+                if(chapterIndex == (chapters.size() - 1)) {
+                    btnNextChapter.setVisibility(View.GONE);
+                } else if(chapterIndex == 0) {
+                    btnPreviousChapter.setVisibility(View.GONE);
+                } else if(chapterIndex < (chapters.size() - 1)){
+                    btnNextChapter.setVisibility(View.VISIBLE);
+                } else if(chapterIndex != 0){
+                    btnPreviousChapter.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        btnPreviousChapter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(chapterIndex != 0) {
+                    loadContent(chapters.get(chapterIndex - 1).getChapterTitle());
+                    chapterIndex -= 1;
+                }
+                if(chapterIndex == (chapters.size() - 1)) {
+                    btnNextChapter.setVisibility(View.GONE);
+                } else if(chapterIndex == 0) {
+                    btnPreviousChapter.setVisibility(View.GONE);
+                } else if(chapterIndex < (chapters.size() - 1)){
+                    btnNextChapter.setVisibility(View.VISIBLE);
+                } else if(chapterIndex != 0){
+                    btnPreviousChapter.setVisibility(View.VISIBLE);
+                }
             }
         });
     }

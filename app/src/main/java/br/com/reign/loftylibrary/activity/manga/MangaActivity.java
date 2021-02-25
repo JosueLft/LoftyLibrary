@@ -151,9 +151,9 @@ public class MangaActivity<CatalogFragment> extends AppCompatActivity {
                         HomePostAdapter.ViewHolder holder = new HomePostAdapter.ViewHolder(view);
                         chapterTitle = String.valueOf(holder.getTxtChapterTitle().getText());
                         workTitle = String.valueOf(holder.getTxtPostTitle().getText());
-                        dateChapter = String.valueOf(holder.getTxtDateChapter().getText());
-//                        comunication.invokeSelectedChapter("mangasFragment", "mangas", workTitle, chapterTitle);
                         Intent intent = new Intent(getApplicationContext(), ReadMangaActivity.class);
+                        intent.putExtra("WorkTitle", workTitle);
+                        intent.putExtra("ChapterTitle", chapterTitle);
                         startActivity(intent);
                     }
 

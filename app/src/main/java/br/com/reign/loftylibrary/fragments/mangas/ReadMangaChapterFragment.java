@@ -127,7 +127,7 @@ public class ReadMangaChapterFragment extends Fragment {
     }
 
     public void initializeComponents(View view) {
-        rvMangaChapterContent = view.findViewById(R.id.MangaContent);
+        rvMangaChapterContent = view.findViewById(R.id.rvMangaContent);
         rvMangaChapterContent.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         mangaChapterAdapter = new MangaChapterAdapter(chapterPages, getActivity());
