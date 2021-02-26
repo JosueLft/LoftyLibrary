@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
@@ -19,17 +20,23 @@ import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.xwray.groupie.GroupAdapter;
 
 import java.util.ArrayList;
 
 import br.com.reign.loftylibrary.R;
 import br.com.reign.loftylibrary.adapter.MangaChapterAdapter;
+import br.com.reign.loftylibrary.model.Manga;
 import br.com.reign.loftylibrary.model.MangaChapter;
 import br.com.reign.loftylibrary.utils.SortPages;
 
@@ -38,10 +45,11 @@ public class ReadMangaActivity extends AppCompatActivity {
     private MangaChapterAdapter mangaChapterAdapter;
     private String chapterTitle;
     private String workTitle;
+    private String chapterCover;
     private RecyclerView rvMangaContent;
     private ArrayList<MangaChapter> chapterPages = new ArrayList<>();
     private ArrayList<MangaChapter> chapters = new ArrayList<>();
-
+    private MangaChapter manga = new MangaChapter();
     private Button btnNextChapter;
     private Button btnPreviousChapter;
     private Button btnAddLibrary;
@@ -65,6 +73,7 @@ public class ReadMangaActivity extends AppCompatActivity {
         receivingChapter();
         loadContent(chapterTitle);
         nextChapter();
+        addLibrary();
     }
 
     private void initializeComponents() {
@@ -166,6 +175,8 @@ public class ReadMangaActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 loadContent(chapters.get(chapterIndex + 1).getChapterTitle());
+                txtCurrentChapterTitle.setText(chapters.get(chapterIndex + 1).getChapterTitle());
+                chapterTitle = chapters.get(chapterIndex + 1).getChapterTitle();
                 chapterIndex += 1;
                 if(chapterIndex == (chapters.size() - 1)) {
                     btnNextChapter.setVisibility(View.GONE);
@@ -184,6 +195,8 @@ public class ReadMangaActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if(chapterIndex != 0) {
                     loadContent(chapters.get(chapterIndex - 1).getChapterTitle());
+                    txtCurrentChapterTitle.setText(chapters.get(chapterIndex - 1).getChapterTitle());
+                    chapterTitle = chapters.get(chapterIndex - 1).getChapterTitle();
                     chapterIndex -= 1;
                 }
                 if(chapterIndex == (chapters.size() - 1)) {
@@ -195,6 +208,54 @@ public class ReadMangaActivity extends AppCompatActivity {
                 } else if(chapterIndex != 0){
                     btnPreviousChapter.setVisibility(View.VISIBLE);
                 }
+            }
+        });
+    }
+
+    private void addLibrary() {
+        btnAddLibrary.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final String id = FirebaseAuth.getInstance().getUid();
+                dbReference = FirebaseDatabase.getInstance().getReference()
+                        .child("chapters")
+                        .child("mangas")
+                        .child(workTitle);
+                dbReference.addValueEventListener(new ValueEventListener() { // metodo utilizado para salvar um capitulo na biblioteca do usuario atual
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                manga.setCover(String.valueOf(dataSnapshot.child("cover").getValue()));
+                                long currentDate = System.currentTimeMillis();
+                                manga.setChapterTitle(chapterTitle);
+                                manga.setDate(currentDate);
+                                FirebaseFirestore.getInstance()
+                                                .collection("users")
+                                                .document(id)
+                                                .collection("library")
+                                                .document(workTitle)
+                                                .set(manga)
+                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void aVoid) {
+                                                        Toast.makeText(
+                                                                ReadMangaActivity.this,
+                                                                "Adicionado a biblioteca com sucesso",
+                                                                Toast.LENGTH_LONG
+                                                        ).show();
+                                                    }
+                                                })
+                                                .addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+
+                                                    }
+                                                });
+                            }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                Toast.makeText(getApplicationContext(), databaseError.getMessage(), Toast.LENGTH_LONG).show();
+                            }
+                        });
             }
         });
     }

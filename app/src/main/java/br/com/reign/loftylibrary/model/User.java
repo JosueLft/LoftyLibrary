@@ -2,9 +2,11 @@ package br.com.reign.loftylibrary.model;
 
 public class User {
 
-    private final String id;
-    private final String name;
-    private final String profileUrl;
+    private String id;
+    private String name;
+    private String profileUrl;
+
+    public User() {}
 
     public User(String id, String name, String profileUrl) {
         this.id = id;

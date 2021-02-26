@@ -173,6 +173,22 @@ public class MangaActivity<CatalogFragment> extends AppCompatActivity {
         ));
     }
 
+    private void recoverCover() {
+        dbReference.child("chapters")
+                .child("mangas")
+                .child(workTitle)
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        cover = String.valueOf(dataSnapshot.child("cover").getValue());
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        Toast.makeText(getApplicationContext(), databaseError.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });
+    }
+
     private void openNovels() {
         imgNovelsIcon.setOnClickListener(new View.OnClickListener() {
             @Override
