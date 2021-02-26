@@ -16,6 +16,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -32,6 +33,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.reign.loftylibrary.R;
+import br.com.reign.loftylibrary.activity.catalog.CatalogActivity;
+import br.com.reign.loftylibrary.activity.library.LibraryActivity;
+import br.com.reign.loftylibrary.activity.manga.MangaActivity;
+import br.com.reign.loftylibrary.activity.novel.NovelActivity;
 import br.com.reign.loftylibrary.activity.settings.SettingsActivity;
 import br.com.reign.loftylibrary.utils.MenuSelect;
 
@@ -42,7 +47,7 @@ public class LoginActivity extends AppCompatActivity {
     private TextInputEditText txtEmail;
     private TextInputEditText txtPassword;
     private Button btnLogin;
-    private Button btnGoogleLogin;
+    private SignInButton btnGoogleLogin;
     private TextView txtRegister;
 
     MenuSelect menu = new MenuSelect();
@@ -208,37 +213,46 @@ public class LoginActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
     }
 
-    public void openMangas() {
+    private void openMangas() {
         imgMangasIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), MangaActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
                 menu.selectMenu(txtMangasIcon, components);
             }
         });
     }
-
-    public void openNovels() {
+    private void openNovels() {
         imgNovelsIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), NovelActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
                 menu.selectMenu(txtNovelsIcon, components);
             }
         });
     }
-
-    public void openCatalog() {
+    private void openCatalog() {
         imgCatalogIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), CatalogActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
                 menu.selectMenu(txtCatalogIcon, components);
             }
         });
     }
-
     public void openLibrary() {
         imgLibraryIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), LibraryActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
                 menu.selectMenu(txtLibraryIcon, components);
             }
         });

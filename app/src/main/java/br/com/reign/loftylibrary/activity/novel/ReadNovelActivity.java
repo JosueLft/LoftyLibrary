@@ -1,4 +1,4 @@
-package br.com.reign.loftylibrary.activity.manga;
+package br.com.reign.loftylibrary.activity.novel;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -29,33 +28,30 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.xwray.groupie.GroupAdapter;
 
 import java.util.ArrayList;
 
 import br.com.reign.loftylibrary.R;
 import br.com.reign.loftylibrary.activity.account.LoginActivity;
+import br.com.reign.loftylibrary.activity.manga.ReadMangaActivity;
 import br.com.reign.loftylibrary.adapter.MangaChapterAdapter;
-import br.com.reign.loftylibrary.model.Manga;
 import br.com.reign.loftylibrary.model.MangaChapter;
+import br.com.reign.loftylibrary.model.NovelChapter;
 import br.com.reign.loftylibrary.utils.SortPages;
 
-public class ReadMangaActivity extends AppCompatActivity {
+public class ReadNovelActivity extends AppCompatActivity {
 
-    private MangaChapterAdapter mangaChapterAdapter;
     private String chapterTitle;
+    private ArrayList<NovelChapter> chapters = new ArrayList<>();
     private String workTitle;
-    private String chapterCover;
-    private RecyclerView rvMangaContent;
-    private ArrayList<MangaChapter> chapterPages = new ArrayList<>();
-    private ArrayList<MangaChapter> chapters = new ArrayList<>();
-    private MangaChapter manga = new MangaChapter();
+    private TextView txtNovelTitle;
+    private TextView txtByTranslated;
+    private TextView txtContentChapter;
+    private NovelChapter novel = new NovelChapter();
     private Button btnNextChapter;
     private Button btnPreviousChapter;
     private Button btnAddLibrary;
-    private TextView txtCurrentChapterTitle;
     private int chapterIndex;
 
     // Firebase
@@ -68,7 +64,7 @@ public class ReadMangaActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_read_manga);
+        setContentView(R.layout.activity_read_novel);
 
         initializeComponents();
         closeAds();
@@ -79,13 +75,10 @@ public class ReadMangaActivity extends AppCompatActivity {
     }
 
     private void initializeComponents() {
-        txtCurrentChapterTitle = findViewById(R.id.txtCurrentChapterTitle);
-        //RecyclerView
-        rvMangaContent = findViewById(R.id.rvMangaContent);
-        rvMangaContent.setLayoutManager(new LinearLayoutManager(this));
-        //Adapter
-        mangaChapterAdapter = new MangaChapterAdapter(chapterPages, this);
-        rvMangaContent.setAdapter(mangaChapterAdapter);
+        // TextView
+        txtNovelTitle = findViewById(R.id.txtNovelTitle);
+        txtByTranslated = findViewById(R.id.txtByTranslated);
+        txtContentChapter = findViewById(R.id.txtContentChapter);
         // Controllers
         btnNextChapter = findViewById(R.id.btnNextChapter);
         btnPreviousChapter = findViewById(R.id.btnPreviousChapter);
@@ -102,31 +95,20 @@ public class ReadMangaActivity extends AppCompatActivity {
     private void receivingChapter() {
         workTitle = getIntent().getExtras().getString("WorkTitle");
         chapterTitle = getIntent().getExtras().getString("ChapterTitle");
-        txtCurrentChapterTitle.setText(chapterTitle);
     }
 
     private void loadContent(final String chapterTitle) {
-
-        dbReference = FirebaseDatabase.getInstance().getReference()
+        FirebaseDatabase.getInstance().getReference()
                 .child("chapters")
-                .child("mangas")
+                .child("novels")
                 .child(workTitle)
-                .child(chapterTitle);
-
-        dbReference.addValueEventListener(new ValueEventListener() {
+                .child(chapterTitle).addValueEventListener(new ValueEventListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                chapterPages.clear();
-                SortPages compare = new SortPages();
-                for(DataSnapshot data : dataSnapshot.getChildren()) {
-                    if(!(data.getKey().equalsIgnoreCase("currentDate"))) {
-                        chapterPages.add(new MangaChapter(Integer.parseInt(String.valueOf(data.getKey())), String.valueOf(data.getValue())));
-                        chapterPages.sort(compare);
-                    }
-                }
-
-                mangaChapterAdapter.notifyDataSetChanged();
+                txtNovelTitle.setText(dataSnapshot.getKey());
+                txtByTranslated.setText(String.valueOf(dataSnapshot.child("translatedBy").getValue()));
+                txtContentChapter.setText(String.valueOf(dataSnapshot.child("contentChapter").getValue()));
             }
 
             @Override
@@ -137,27 +119,25 @@ public class ReadMangaActivity extends AppCompatActivity {
     }
 
     private void nextChapter() {
-        dbReference = FirebaseDatabase.getInstance().getReference()
+        FirebaseDatabase.getInstance().getReference()
                 .child("chapters")
-                .child("mangas")
-                .child(workTitle);
-
-        dbReference.addValueEventListener(new ValueEventListener() {
+                .child("novels")
+                .child(workTitle).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 chapters.clear();
-                for(DataSnapshot data : dataSnapshot.getChildren()) {
-                    if(!(data.getKey().equalsIgnoreCase("cover")) && !(data.getKey().equalsIgnoreCase("currentDate"))) {
-                        chapters.add(new MangaChapter(data.getKey()));
+                for (DataSnapshot data : dataSnapshot.getChildren()) {
+                    if (!(data.getKey().equalsIgnoreCase("cover")) && !(data.getKey().equalsIgnoreCase("currentDate"))) {
+                        chapters.add(new NovelChapter(data.getKey()));
                     }
                 }
-
                 for(int i = 0; i < chapters.size(); i++) {
                     if(chapters.get(i).getChapterTitle().equals(chapterTitle)) {
                         chapterIndex = i;
+                        Toast.makeText(ReadNovelActivity.this, "indice: " + chapterIndex, Toast.LENGTH_LONG).show();
                     }
                 }
-                if(chapterIndex == (chapters.size() - 1)) {
+                if(chapterIndex == (chapters.size() + 1)) {
                     btnNextChapter.setVisibility(View.GONE);
                 } else if(chapterIndex == 0) {
                     btnPreviousChapter.setVisibility(View.GONE);
@@ -177,7 +157,6 @@ public class ReadMangaActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 loadContent(chapters.get(chapterIndex + 1).getChapterTitle());
-                txtCurrentChapterTitle.setText(chapters.get(chapterIndex + 1).getChapterTitle());
                 chapterTitle = chapters.get(chapterIndex + 1).getChapterTitle();
                 chapterIndex += 1;
                 if(chapterIndex == (chapters.size() - 1)) {
@@ -197,7 +176,6 @@ public class ReadMangaActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if(chapterIndex != 0) {
                     loadContent(chapters.get(chapterIndex - 1).getChapterTitle());
-                    txtCurrentChapterTitle.setText(chapters.get(chapterIndex - 1).getChapterTitle());
                     chapterTitle = chapters.get(chapterIndex - 1).getChapterTitle();
                     chapterIndex -= 1;
                 }
@@ -219,33 +197,33 @@ public class ReadMangaActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(FirebaseAuth.getInstance().getUid() == null) {
-                    Intent intent = new Intent(ReadMangaActivity.this, LoginActivity.class);
+                    Intent intent = new Intent(ReadNovelActivity.this, LoginActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                 } else {
                     final String id = FirebaseAuth.getInstance().getUid();
                     dbReference = FirebaseDatabase.getInstance().getReference()
                             .child("chapters")
-                            .child("mangas")
+                            .child("novels")
                             .child(workTitle);
                     dbReference.addValueEventListener(new ValueEventListener() { // metodo utilizado para salvar um capitulo na biblioteca do usuario atual
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            manga.setCover(String.valueOf(dataSnapshot.child("cover").getValue()));
+                            novel.setCover(String.valueOf(dataSnapshot.child("cover").getValue()));
                             long currentDate = System.currentTimeMillis();
-                            manga.setChapterTitle(chapterTitle);
-                            manga.setDate(currentDate);
+                            novel.setChapterTitle(chapterTitle);
+                            novel.setDate(currentDate);
                             FirebaseFirestore.getInstance()
                                     .collection("users")
                                     .document(id)
                                     .collection("library")
                                     .document(workTitle)
-                                    .set(manga)
+                                    .set(novel)
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
                                             Toast.makeText(
-                                                    ReadMangaActivity.this,
+                                                    ReadNovelActivity.this,
                                                     "Adicionado a biblioteca com sucesso",
                                                     Toast.LENGTH_LONG
                                             ).show();

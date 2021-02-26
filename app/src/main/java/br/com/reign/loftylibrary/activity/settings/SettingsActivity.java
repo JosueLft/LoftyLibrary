@@ -14,9 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.reign.loftylibrary.R;
+import br.com.reign.loftylibrary.activity.catalog.CatalogActivity;
 import br.com.reign.loftylibrary.activity.library.LibraryActivity;
 import br.com.reign.loftylibrary.activity.account.LoginActivity;
 import br.com.reign.loftylibrary.activity.manga.MangaActivity;
+import br.com.reign.loftylibrary.activity.novel.NovelActivity;
 import br.com.reign.loftylibrary.utils.MenuSelect;
 
 public class SettingsActivity extends AppCompatActivity {
@@ -102,6 +104,9 @@ public class SettingsActivity extends AppCompatActivity {
         imgNovelsIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), NovelActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
                 menu.selectMenu(txtNovelsIcon, components);
             }
         });
@@ -111,6 +116,9 @@ public class SettingsActivity extends AppCompatActivity {
         imgCatalogIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), CatalogActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
                 menu.selectMenu(txtCatalogIcon, components);
             }
         });

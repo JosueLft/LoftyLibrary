@@ -13,12 +13,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".activity.novel.ReadNovelActivity"></activity>
         <activity android:name=".activity.manga.ReadMangaActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.manga.MangaActivity" />
         </activity>
-        <activity android:name=".activity.catalog.CatalogActivity"></activity>
+        <activity android:name=".activity.catalog.CatalogActivity" />
         <activity android:name=".activity.novel.NovelActivity" />
         <activity android:name=".activity.library.LibraryActivity" />
         <activity android:name=".activity.account.RegisterActivity" />

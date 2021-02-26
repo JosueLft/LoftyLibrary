@@ -45,12 +45,9 @@ public class MangaActivity<CatalogFragment> extends AppCompatActivity {
     private DatabaseReference dbProject;
     private DatabaseReference dbReference = FirebaseDatabase.getInstance().getReference();
     private ValueEventListener listenerMangas;
-    private String cover;
     private String chapterTitle;
     private String workTitle;
-    private String dateChapter;
     private String layout = "Card";
-    private Switch switchLayout;
     MenuSelect menu = new MenuSelect();
     private TextView txtMangasIcon;
     private ImageView imgMangasIcon;
@@ -98,9 +95,6 @@ public class MangaActivity<CatalogFragment> extends AppCompatActivity {
         recyclerPost = findViewById(R.id.rvPost);
         recyclerPost.setHasFixedSize(true);
         recyclerPost.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        // Switch
-        switchLayout = findViewById(R.id.switchLayout);
-
         // Adapters
         adapter = new HomePostAdapter(postItems, getApplicationContext(), layout);
 
@@ -162,7 +156,6 @@ public class MangaActivity<CatalogFragment> extends AppCompatActivity {
                         HomePostAdapter.ViewHolder holder = new HomePostAdapter.ViewHolder(view);
                         chapterTitle = String.valueOf(holder.getTxtChapterTitle().getText());
                         workTitle = String.valueOf(holder.getTxtPostTitle().getText());
-//                        comunication.captureTitle(workTitle, "mangas");
                     }
 
                     @Override
@@ -171,22 +164,6 @@ public class MangaActivity<CatalogFragment> extends AppCompatActivity {
                     }
                 }
         ));
-    }
-
-    private void recoverCover() {
-        dbReference.child("chapters")
-                .child("mangas")
-                .child(workTitle)
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        cover = String.valueOf(dataSnapshot.child("cover").getValue());
-                    }
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                        Toast.makeText(getApplicationContext(), databaseError.getMessage(), Toast.LENGTH_LONG).show();
-                    }
-                });
     }
 
     private void openNovels() {

@@ -42,7 +42,7 @@ public class CatalogActivity extends AppCompatActivity {
         openNovels();
         openLibrary();
         openSettings();
-        menu.selectMenu(txtLibraryIcon, components);
+        menu.selectMenu(txtCatalogIcon, components);
     }
 
     private void initializeComponents() {
