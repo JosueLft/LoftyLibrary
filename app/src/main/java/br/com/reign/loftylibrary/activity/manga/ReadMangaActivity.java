@@ -9,8 +9,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,17 +29,15 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.xwray.groupie.GroupAdapter;
 
 import java.util.ArrayList;
 
 import br.com.reign.loftylibrary.R;
 import br.com.reign.loftylibrary.activity.account.LoginActivity;
 import br.com.reign.loftylibrary.adapter.MangaChapterAdapter;
-import br.com.reign.loftylibrary.model.Manga;
 import br.com.reign.loftylibrary.model.MangaChapter;
+import br.com.reign.loftylibrary.utils.RecyclerItemClickListener;
 import br.com.reign.loftylibrary.utils.SortPages;
 
 public class ReadMangaActivity extends AppCompatActivity {
@@ -47,7 +45,6 @@ public class ReadMangaActivity extends AppCompatActivity {
     private MangaChapterAdapter mangaChapterAdapter;
     private String chapterTitle;
     private String workTitle;
-    private String chapterCover;
     private RecyclerView rvMangaContent;
     private ArrayList<MangaChapter> chapterPages = new ArrayList<>();
     private ArrayList<MangaChapter> chapters = new ArrayList<>();
@@ -57,13 +54,13 @@ public class ReadMangaActivity extends AppCompatActivity {
     private Button btnAddLibrary;
     private TextView txtCurrentChapterTitle;
     private int chapterIndex;
-
     // Firebase
     private DatabaseReference dbReference;
-
     // Google AdMob
     private Button btnCloseAds;
     private AdView adsPainel;
+    //  zoom variables
+    private float originalScaleX, originalScaleY;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,10 +69,12 @@ public class ReadMangaActivity extends AppCompatActivity {
 
         initializeComponents();
         closeAds();
+        initAdMob();
         receivingChapter();
         loadContent(chapterTitle);
         nextChapter();
         addLibrary();
+        zoom();
     }
 
     private void initializeComponents() {
@@ -95,8 +94,7 @@ public class ReadMangaActivity extends AppCompatActivity {
         btnCloseAds = findViewById(R.id.btnCloseAds);
         adsPainel = new AdView(this);
         adsPainel.setAdSize(AdSize.BANNER);
-        adsPainel.setAdUnitId("ca-app-pub-3940256099942544/6300978111");
-        initAdMob();
+        adsPainel.setAdUnitId("ca-app-pub-2875078029151249/7996416031");
     }
 
     private void receivingChapter() {
@@ -106,13 +104,11 @@ public class ReadMangaActivity extends AppCompatActivity {
     }
 
     private void loadContent(final String chapterTitle) {
-
         dbReference = FirebaseDatabase.getInstance().getReference()
                 .child("chapters")
                 .child("mangas")
                 .child(workTitle)
                 .child(chapterTitle);
-
         dbReference.addValueEventListener(new ValueEventListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
@@ -141,7 +137,6 @@ public class ReadMangaActivity extends AppCompatActivity {
                 .child("chapters")
                 .child("mangas")
                 .child(workTitle);
-
         dbReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -167,7 +162,6 @@ public class ReadMangaActivity extends AppCompatActivity {
                     btnPreviousChapter.setVisibility(View.VISIBLE);
                 }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
@@ -268,6 +262,33 @@ public class ReadMangaActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public void zoom() {
+        originalScaleX = rvMangaContent.getScaleX();
+        originalScaleY = rvMangaContent.getScaleY();
+        rvMangaContent.addOnItemTouchListener(new RecyclerItemClickListener(
+                this,
+                rvMangaContent,
+                new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        rvMangaContent.setScaleX((float) (rvMangaContent.getScaleX() + 0.2));
+                        rvMangaContent.setScaleY((float) (rvMangaContent.getScaleY() + 0.2));
+                    }
+
+                    @Override
+                    public void onLongItemClick(View view, int position) {
+                        rvMangaContent.setScaleX(originalScaleX);
+                        rvMangaContent.setScaleY(originalScaleY);
+                    }
+
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                    }
+                }
+        ));
     }
 
     private void initAdMob() {

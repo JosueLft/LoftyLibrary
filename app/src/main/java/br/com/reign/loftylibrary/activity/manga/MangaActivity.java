@@ -5,8 +5,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,6 +16,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -37,7 +43,7 @@ import br.com.reign.loftylibrary.utils.CompareChapterByDate;
 import br.com.reign.loftylibrary.utils.MenuSelect;
 import br.com.reign.loftylibrary.utils.RecyclerItemClickListener;
 
-public class MangaActivity<CatalogFragment> extends AppCompatActivity {
+public class MangaActivity extends AppCompatActivity {
 
     private RecyclerView recyclerPost;
     private HomePostAdapter adapter;
@@ -62,12 +68,18 @@ public class MangaActivity<CatalogFragment> extends AppCompatActivity {
 
     private List<TextView> components = new ArrayList<>();
 
+    // Google AdMob
+    private Button btnCloseAds;
+    private AdView adsPainel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manga);
 
         initializeComponents();
+        closeAds();
+        initAdMob();
         loadContent();
         openNovels();
         openCatalog();
@@ -99,6 +111,12 @@ public class MangaActivity<CatalogFragment> extends AppCompatActivity {
         adapter = new HomePostAdapter(postItems, getApplicationContext(), layout);
 
         recyclerPost.setAdapter(adapter);
+
+        // Google AdMob
+        btnCloseAds = findViewById(R.id.btnCloseAds);
+        adsPainel = new AdView(this);
+        adsPainel.setAdSize(AdSize.BANNER);
+        adsPainel.setAdUnitId("ca-app-pub-2875078029151249/7996416031");
     }
 
     private void loadContent() {
@@ -207,6 +225,26 @@ public class MangaActivity<CatalogFragment> extends AppCompatActivity {
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 menu.selectMenu(txtSettingsIcon, components);
+            }
+        });
+    }
+
+    private void initAdMob() {
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            }
+        });
+        adsPainel = findViewById(R.id.adsPainel);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adsPainel.loadAd(adRequest);
+    }
+    private void closeAds() {
+        btnCloseAds.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                adsPainel.setVisibility(View.GONE);
+                btnCloseAds.setVisibility(View.GONE);
             }
         });
     }

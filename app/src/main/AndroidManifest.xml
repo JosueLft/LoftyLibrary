@@ -13,7 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.novel.ReadNovelActivity"></activity>
+        <activity android:name=".activity.catalog.WorkActivity"></activity>
+        <activity android:name=".activity.novel.ReadNovelActivity" />
         <activity android:name=".activity.manga.ReadMangaActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -44,7 +45,7 @@
         <!-- Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713 -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-3940256099942544~3347511713" />
+            android:value="ca-app-pub-2875078029151249~8954274486" />
     </application>
 
 </manifest>

@@ -7,17 +7,69 @@
     android:layout_height="match_parent"
     tools:context=".activity.catalog.CatalogActivity">
 
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Em Desenvolvimento"
-        android:textColor="@color/colorAccent"
-        android:textSize="30sp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="12dp"
+        android:textColorHint="@color/colorAccent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editSearch"
+            style="@style/StylesTilEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/ic_search_icon"
+            android:hint="@string/txtSearchWork"
+            android:inputType="text"
+            android:textColor="@color/colorAccent" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvCatalogWorks"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <Button
+            android:id="@+id/btnCloseAds"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="15dp"
+            android:background="@drawable/ic_close_ad" />
+
+        <com.google.android.gms.ads.AdView
+            android:id="@+id/adsPainel"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            app:adSize="BANNER"
+            app:adUnitId="ca-app-pub-9527989571520943/7257308806">
+        </com.google.android.gms.ads.AdView>
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout"

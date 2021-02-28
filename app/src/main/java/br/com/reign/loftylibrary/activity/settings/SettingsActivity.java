@@ -5,9 +5,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
@@ -36,6 +43,9 @@ public class SettingsActivity extends AppCompatActivity {
     private ImageView imgSettingsIcon;
     MenuSelect menu = new MenuSelect();
     private List<TextView> components = new ArrayList<>();
+    // Google AdMob
+    private Button btnCloseAds;
+    private AdView adsPainel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +54,8 @@ public class SettingsActivity extends AppCompatActivity {
 
         verifyAuthentication();
         initializeComponents();
+        closeAds();
+        initAdMob();
         openMangas();
         openNovels();
         openCatalog();
@@ -86,6 +98,12 @@ public class SettingsActivity extends AppCompatActivity {
         imgCatalogIcon = findViewById(R.id.imgCatalogIcon);
         imgLibraryIcon = findViewById(R.id.imgLibraryIcon);
         imgSettingsIcon = findViewById(R.id.imgSettingsIcon);
+
+        // Google AdMob
+        btnCloseAds = findViewById(R.id.btnCloseAds);
+        adsPainel = new AdView(this);
+        adsPainel.setAdSize(AdSize.BANNER);
+        adsPainel.setAdUnitId("ca-app-pub-9527989571520943/7257308806");
     }
 
     private void openMangas() {
@@ -99,7 +117,6 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
     }
-
     private void openNovels() {
         imgNovelsIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,7 +128,6 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
     }
-
     private void openCatalog() {
         imgCatalogIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,7 +139,6 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
     }
-
     private void openLibrary() {
         imgLibraryIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,6 +147,26 @@ public class SettingsActivity extends AppCompatActivity {
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 menu.selectMenu(txtLibraryIcon, components);
+            }
+        });
+    }
+
+    private void initAdMob() {
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            }
+        });
+        adsPainel = findViewById(R.id.adsPainel);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adsPainel.loadAd(adRequest);
+    }
+    private void closeAds() {
+        btnCloseAds.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                adsPainel.setVisibility(View.GONE);
+                btnCloseAds.setVisibility(View.GONE);
             }
         });
     }
