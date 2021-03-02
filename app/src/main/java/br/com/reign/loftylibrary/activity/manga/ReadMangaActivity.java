@@ -229,6 +229,7 @@ public class ReadMangaActivity extends AppCompatActivity {
                             long currentDate = System.currentTimeMillis();
                             manga.setChapterTitle(chapterTitle);
                             manga.setDate(currentDate);
+                            manga.setWorkTitle(workTitle);
                             FirebaseFirestore.getInstance()
                                     .collection("users")
                                     .document(id)

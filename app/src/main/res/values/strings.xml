@@ -11,6 +11,9 @@
     <!-- Home Posts -->
     <string name="txtWorkTitle">Work Title</string>
 
+    <!-- Library -->
+    <string name="txtLibraryEmpty">Você ainda não adicionou nenhuma obra!</string>
+
     <!-- Catalogo -->
     <string name="txtSearchWork">Informe o nome da obra</string>
     <string name="txtWorkGenre">Genero</string>

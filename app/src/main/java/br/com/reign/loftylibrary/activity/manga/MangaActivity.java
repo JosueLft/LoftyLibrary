@@ -3,6 +3,7 @@ package br.com.reign.loftylibrary.activity.manga;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -22,23 +23,34 @@ import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.installations.FirebaseInstallations;
+import com.google.firebase.installations.InstallationTokenResult;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import br.com.reign.loftylibrary.R;
+import br.com.reign.loftylibrary.activity.account.LoginActivity;
 import br.com.reign.loftylibrary.activity.catalog.CatalogActivity;
 import br.com.reign.loftylibrary.activity.library.LibraryActivity;
+import br.com.reign.loftylibrary.activity.notifications.AppApplication;
+import br.com.reign.loftylibrary.activity.notifications.Notification;
 import br.com.reign.loftylibrary.activity.novel.NovelActivity;
 import br.com.reign.loftylibrary.activity.settings.SettingsActivity;
 import br.com.reign.loftylibrary.adapter.HomePostAdapter;
 import br.com.reign.loftylibrary.model.MangaChapter;
 import br.com.reign.loftylibrary.model.Post;
+import br.com.reign.loftylibrary.model.User;
 import br.com.reign.loftylibrary.utils.CompareChapterByDate;
 import br.com.reign.loftylibrary.utils.MenuSelect;
 import br.com.reign.loftylibrary.utils.RecyclerItemClickListener;
@@ -65,7 +77,7 @@ public class MangaActivity extends AppCompatActivity {
     private ImageView imgLibraryIcon;
     private TextView txtSettingsIcon;
     private ImageView imgSettingsIcon;
-
+    private User user;
     private List<TextView> components = new ArrayList<>();
 
     // Google AdMob
@@ -77,6 +89,11 @@ public class MangaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manga);
 
+        // Verificando se o usuario está online
+        AppApplication application = (AppApplication) getApplication();
+        getApplication().registerActivityLifecycleCallbacks(application);
+        updateToken();
+
         initializeComponents();
         closeAds();
         initAdMob();
@@ -87,6 +104,16 @@ public class MangaActivity extends AppCompatActivity {
         openSettings();
         menu.selectMenu(txtMangasIcon, components);
         readChapter();
+    }
+    private void updateToken() {
+        String token = FirebaseInstanceId.getInstance().getToken();
+        String uid = FirebaseAuth.getInstance().getUid();
+
+        if(uid != null) {
+            FirebaseFirestore.getInstance().collection("users")
+                    .document(uid)
+                    .update("token", token);
+        }
     }
 
     private void initializeComponents() {
@@ -152,7 +179,6 @@ public class MangaActivity extends AppCompatActivity {
         };
         dbProject.addValueEventListener(listenerMangas);
     }
-
     private void readChapter() {
         recyclerPost.addOnItemTouchListener(new RecyclerItemClickListener(
                 this,
@@ -228,7 +254,6 @@ public class MangaActivity extends AppCompatActivity {
             }
         });
     }
-
     private void initAdMob() {
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
             @Override

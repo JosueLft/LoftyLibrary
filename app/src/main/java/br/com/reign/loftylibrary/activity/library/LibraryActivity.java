@@ -1,10 +1,14 @@
 package br.com.reign.loftylibrary.activity.library;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -17,7 +21,17 @@ import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.squareup.picasso.Picasso;
+import com.xwray.groupie.GroupieAdapter;
+import com.xwray.groupie.GroupieViewHolder;
+import com.xwray.groupie.Item;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,10 +41,17 @@ import br.com.reign.loftylibrary.activity.catalog.CatalogActivity;
 import br.com.reign.loftylibrary.activity.manga.MangaActivity;
 import br.com.reign.loftylibrary.activity.novel.NovelActivity;
 import br.com.reign.loftylibrary.activity.settings.SettingsActivity;
+import br.com.reign.loftylibrary.model.Chapter;
 import br.com.reign.loftylibrary.utils.MenuSelect;
 
 public class LibraryActivity extends AppCompatActivity {
-    private RecyclerView rvLastChapter;
+    // Library
+    private List<Chapter> listChapters = new ArrayList<>();
+    private RecyclerView rvLastChapters;
+    private TextView txtLibraryEmpty;
+    private TextView txtFollowing;
+    GroupieAdapter adapter = new GroupieAdapter();
+    // Menu
     private TextView txtMangasIcon;
     private ImageView imgMangasIcon;
     private TextView txtNovelsIcon;
@@ -54,6 +75,7 @@ public class LibraryActivity extends AppCompatActivity {
 
         verifyAuthentication();
         initializeComponents();
+        fetchLibrary();
         closeAds();
         initAdMob();
         openMangas();
@@ -61,6 +83,31 @@ public class LibraryActivity extends AppCompatActivity {
         openCatalog();
         openSettings();
         menu.selectMenu(txtLibraryIcon, components);
+    }
+
+    private void fetchLibrary() {
+        FirebaseFirestore.getInstance().collection("/users")
+                .document(FirebaseAuth.getInstance().getUid())
+                .collection("library")
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
+                        List<DocumentSnapshot> chapters = queryDocumentSnapshots.getDocuments();
+                        for(DocumentSnapshot chapter : chapters) {
+                            Chapter c = chapter.toObject(Chapter.class);
+                            if(!c.equals(null)) {
+                                txtLibraryEmpty.setVisibility(View.GONE);
+                                txtFollowing.setVisibility(View.VISIBLE);
+                                rvLastChapters.setVisibility(View.VISIBLE);
+                                adapter.add(new LibraryItem(c));
+                            } else {
+                                txtLibraryEmpty.setVisibility(View.VISIBLE);
+                                txtFollowing.setVisibility(View.GONE);
+                                rvLastChapters.setVisibility(View.GONE);
+                            }
+                        }
+                    }
+                });
     }
 
     private void verifyAuthentication() { // metodo utilizado para verificar se esta logado e redirecionar pra determinada activity
@@ -78,6 +125,8 @@ public class LibraryActivity extends AppCompatActivity {
         components.add(txtCatalogIcon = findViewById(R.id.txtCatalogIcon));
         components.add(txtLibraryIcon = findViewById(R.id.txtLibraryIcon));
         components.add(txtSettingsIcon = findViewById(R.id.txtSettingsIcon));
+        txtLibraryEmpty = findViewById(R.id.txtLibraryEmpty);
+        txtFollowing = findViewById(R.id.txtFollowing);
 
         // Image View
         imgMangasIcon = findViewById(R.id.imgMangasIcon);
@@ -86,11 +135,47 @@ public class LibraryActivity extends AppCompatActivity {
         imgLibraryIcon = findViewById(R.id.imgLibraryIcon);
         imgSettingsIcon = findViewById(R.id.imgSettingsIcon);
 
+        // RecyclerView
+        rvLastChapters = findViewById(R.id.rvLastChapters);
+        rvLastChapters.setAdapter(adapter);
+        rvLastChapters.setLayoutManager(new LinearLayoutManager(this));
+
         // Google AdMob
         btnCloseAds = findViewById(R.id.btnCloseAds);
         adsPainel = new AdView(this);
         adsPainel.setAdSize(AdSize.BANNER);
         adsPainel.setAdUnitId("ca-app-pub-9527989571520943/7257308806");
+    }
+
+    private class LibraryItem extends Item<GroupieViewHolder> {
+
+        private final Chapter chapter;
+
+        private LibraryItem(Chapter chapter) {
+            this.chapter = chapter;
+        }
+
+        @Override
+        public void bind(@NonNull GroupieViewHolder viewHolder, int position) {
+            ImageView cover = viewHolder.itemView.findViewById(R.id.workCoverLibrary);
+            TextView txtDate = viewHolder.itemView.findViewById(R.id.txtDateChapterLibrary);
+            TextView txtWorkTitle = viewHolder.itemView.findViewById(R.id.txtPostTitleLibrary);
+            TextView txtChapterTitle = viewHolder.itemView.findViewById(R.id.txtChapterTitleLibrary);
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+            String d = sdf.format(chapter.getDate());
+            txtWorkTitle.setText(chapter.getWorkTitle());
+            txtChapterTitle.setText(chapter.getChapterTitle());
+            txtDate.setText(d);
+
+            Picasso.get()
+                    .load(chapter.getCover())
+                    .into(cover);
+        }
+
+        @Override
+        public int getLayout() {
+            return R.layout.home_list_posts;
+        }
     }
 
     private void openMangas() {

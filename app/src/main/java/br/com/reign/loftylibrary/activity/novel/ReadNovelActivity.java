@@ -213,6 +213,7 @@ public class ReadNovelActivity extends AppCompatActivity {
                             long currentDate = System.currentTimeMillis();
                             novel.setChapterTitle(chapterTitle);
                             novel.setDate(currentDate);
+                            novel.setWorkTitle(workTitle);
                             FirebaseFirestore.getInstance()
                                     .collection("users")
                                     .document(id)
