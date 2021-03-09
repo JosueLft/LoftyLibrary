@@ -40,7 +40,6 @@ import br.com.reign.loftylibrary.activity.manga.MangaActivity;
 import br.com.reign.loftylibrary.activity.novel.NovelActivity;
 import br.com.reign.loftylibrary.activity.settings.SettingsActivity;
 import br.com.reign.loftylibrary.adapter.CatalogAdapter;
-import br.com.reign.loftylibrary.controller.Comunication;
 import br.com.reign.loftylibrary.model.Work;
 import br.com.reign.loftylibrary.utils.CompareWorkByName;
 import br.com.reign.loftylibrary.utils.MenuSelect;
@@ -59,9 +58,6 @@ public class CatalogActivity extends AppCompatActivity {
     private ImageView imgSettingsIcon;
     MenuSelect menu = new MenuSelect();
     private List<TextView> components = new ArrayList<>();
-    // Google AdMob
-    private Button btnCloseAds;
-    private AdView adsPainel;
     // Catalog variables
     private EditText editSearch;
     private RecyclerView rvWorks;
@@ -77,8 +73,6 @@ public class CatalogActivity extends AppCompatActivity {
         setContentView(R.layout.activity_catalog);
 
         initializeComponents();
-        closeAds();
-        initAdMob();
         openMangas();
         openNovels();
         openLibrary();
@@ -116,12 +110,6 @@ public class CatalogActivity extends AppCompatActivity {
         imgCatalogIcon = findViewById(R.id.imgCatalogIcon);
         imgLibraryIcon = findViewById(R.id.imgLibraryIcon);
         imgSettingsIcon = findViewById(R.id.imgSettingsIcon);
-
-        // Google AdMob
-        btnCloseAds = findViewById(R.id.btnCloseAds);
-        adsPainel = new AdView(this);
-        adsPainel.setAdSize(AdSize.BANNER);
-        adsPainel.setAdUnitId("ca-app-pub-9527989571520943/7257308806");
     }
 
     private void search() {
@@ -268,26 +256,6 @@ public class CatalogActivity extends AppCompatActivity {
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 menu.selectMenu(txtSettingsIcon, components);
-            }
-        });
-    }
-
-    private void initAdMob() {
-        MobileAds.initialize(this, new OnInitializationCompleteListener() {
-            @Override
-            public void onInitializationComplete(InitializationStatus initializationStatus) {
-            }
-        });
-        adsPainel = findViewById(R.id.adsPainel);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        adsPainel.loadAd(adRequest);
-    }
-    private void closeAds() {
-        btnCloseAds.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                adsPainel.setVisibility(View.GONE);
-                btnCloseAds.setVisibility(View.GONE);
             }
         });
     }

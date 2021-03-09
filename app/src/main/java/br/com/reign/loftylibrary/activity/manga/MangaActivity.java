@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -30,8 +31,14 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.installations.FirebaseInstallations;
 import com.google.firebase.installations.InstallationTokenResult;
@@ -42,12 +49,15 @@ import java.util.List;
 import br.com.reign.loftylibrary.R;
 import br.com.reign.loftylibrary.activity.account.LoginActivity;
 import br.com.reign.loftylibrary.activity.catalog.CatalogActivity;
+import br.com.reign.loftylibrary.activity.catalog.WorkActivity;
 import br.com.reign.loftylibrary.activity.library.LibraryActivity;
 import br.com.reign.loftylibrary.activity.notifications.AppApplication;
 import br.com.reign.loftylibrary.activity.notifications.Notification;
 import br.com.reign.loftylibrary.activity.novel.NovelActivity;
 import br.com.reign.loftylibrary.activity.settings.SettingsActivity;
 import br.com.reign.loftylibrary.adapter.HomePostAdapter;
+import br.com.reign.loftylibrary.model.Chapter;
+import br.com.reign.loftylibrary.model.Manga;
 import br.com.reign.loftylibrary.model.MangaChapter;
 import br.com.reign.loftylibrary.model.Post;
 import br.com.reign.loftylibrary.model.User;
@@ -77,12 +87,7 @@ public class MangaActivity extends AppCompatActivity {
     private ImageView imgLibraryIcon;
     private TextView txtSettingsIcon;
     private ImageView imgSettingsIcon;
-    private User user;
     private List<TextView> components = new ArrayList<>();
-
-    // Google AdMob
-    private Button btnCloseAds;
-    private AdView adsPainel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,8 +100,6 @@ public class MangaActivity extends AppCompatActivity {
         updateToken();
 
         initializeComponents();
-        closeAds();
-        initAdMob();
         loadContent();
         openNovels();
         openCatalog();
@@ -106,13 +109,14 @@ public class MangaActivity extends AppCompatActivity {
         readChapter();
     }
     private void updateToken() {
-        String token = FirebaseInstanceId.getInstance().getToken();
-        String uid = FirebaseAuth.getInstance().getUid();
+        User user = new User();
+        user.setId(FirebaseAuth.getInstance().getUid());
+        user.setToken(FirebaseInstanceId.getInstance().getToken());
 
-        if(uid != null) {
+        if(user.getId() != null) {
             FirebaseFirestore.getInstance().collection("users")
-                    .document(uid)
-                    .update("token", token);
+                    .document(user.getId())
+                    .set(user);
         }
     }
 
@@ -138,18 +142,10 @@ public class MangaActivity extends AppCompatActivity {
         adapter = new HomePostAdapter(postItems, getApplicationContext(), layout);
 
         recyclerPost.setAdapter(adapter);
-
-        // Google AdMob
-        btnCloseAds = findViewById(R.id.btnCloseAds);
-        adsPainel = new AdView(this);
-        adsPainel.setAdSize(AdSize.BANNER);
-        adsPainel.setAdUnitId("ca-app-pub-2875078029151249/7996416031");
     }
 
     private void loadContent() {
-        dbProject = dbReference.child("chapters").child("mangas");
-        listenerMangas = new ValueEventListener() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
+        FirebaseDatabase.getInstance().getReference().child("recent").child("chapters").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 postItems.clear();
@@ -158,14 +154,16 @@ public class MangaActivity extends AppCompatActivity {
                     MangaChapter manga = mangas.getValue(MangaChapter.class);
                     manga.setWorkTitle(mangas.getKey());
                     manga.setCover(String.valueOf(mangas.child("cover").getValue()));
-                    for(DataSnapshot chapter : mangas.getChildren()) {
-                        if(!chapter.getKey().equalsIgnoreCase("cover") && !chapter.getKey().equalsIgnoreCase("currentDate")) {
+                    for (DataSnapshot chapter : mangas.getChildren()) {
+                        if(!chapter.getKey().equalsIgnoreCase("cover") && !chapter.getKey().equalsIgnoreCase("currentDate") && !chapter.getKey().equalsIgnoreCase("date")) {
                             manga.setChapterTitle(chapter.getKey());
                             if(!(chapter.child("currentDate").getValue() == null) && !(chapter.child("currentDate").getValue().equals(""))) {
                                 manga.setDate(Long.parseLong(String.valueOf(chapter.child("currentDate").getValue())));
                             }
                             postItems.add(new Post(manga.getWorkTitle(), manga.getChapterTitle(), manga.getCover(), manga.getDate()));
-                            postItems.sort(compare);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                postItems.sort(compare);
+                            }
                         }
                     }
                 }
@@ -173,11 +171,8 @@ public class MangaActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(getApplicationContext(), databaseError.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        };
-        dbProject.addValueEventListener(listenerMangas);
+            public void onCancelled(@NonNull DatabaseError databaseError) {}
+        });
     }
     private void readChapter() {
         recyclerPost.addOnItemTouchListener(new RecyclerItemClickListener(
@@ -200,6 +195,11 @@ public class MangaActivity extends AppCompatActivity {
                         HomePostAdapter.ViewHolder holder = new HomePostAdapter.ViewHolder(view);
                         chapterTitle = String.valueOf(holder.getTxtChapterTitle().getText());
                         workTitle = String.valueOf(holder.getTxtPostTitle().getText());
+
+                        Intent intent = new Intent(MangaActivity.this, WorkActivity.class);
+                        intent.putExtra("WorkTitle", workTitle);
+                        intent.putExtra("Category", "mangas");
+                        startActivity(intent);
                     }
 
                     @Override
@@ -251,25 +251,6 @@ public class MangaActivity extends AppCompatActivity {
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 menu.selectMenu(txtSettingsIcon, components);
-            }
-        });
-    }
-    private void initAdMob() {
-        MobileAds.initialize(this, new OnInitializationCompleteListener() {
-            @Override
-            public void onInitializationComplete(InitializationStatus initializationStatus) {
-            }
-        });
-        adsPainel = findViewById(R.id.adsPainel);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        adsPainel.loadAd(adRequest);
-    }
-    private void closeAds() {
-        btnCloseAds.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                adsPainel.setVisibility(View.GONE);
-                btnCloseAds.setVisibility(View.GONE);
             }
         });
     }

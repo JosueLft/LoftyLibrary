@@ -71,10 +71,6 @@ public class LoginActivity extends AppCompatActivity {
     private GoogleSignInClient mGoogleSignInClient;
     private FirebaseAuth mAuth;
 
-    // Google AdMob
-    private Button btnCloseAds;
-    private AdView adsPainel;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,8 +83,6 @@ public class LoginActivity extends AppCompatActivity {
         txtRegister = findViewById(R.id.txtRegister);
 
         initializeComponents();
-        closeAds();
-        initAdMob();
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -221,12 +215,6 @@ public class LoginActivity extends AppCompatActivity {
         imgSettingsIcon = findViewById(R.id.imgSettingsIcon);
 
         mAuth = FirebaseAuth.getInstance();
-
-        // Google AdMob
-        btnCloseAds = findViewById(R.id.btnCloseAds);
-        adsPainel = new AdView(this);
-        adsPainel.setAdSize(AdSize.BANNER);
-        adsPainel.setAdUnitId("ca-app-pub-9527989571520943/7257308806");
     }
 
     private void openMangas() {
@@ -270,26 +258,6 @@ public class LoginActivity extends AppCompatActivity {
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 menu.selectMenu(txtLibraryIcon, components);
-            }
-        });
-    }
-
-    private void initAdMob() {
-        MobileAds.initialize(this, new OnInitializationCompleteListener() {
-            @Override
-            public void onInitializationComplete(InitializationStatus initializationStatus) {
-            }
-        });
-        adsPainel = findViewById(R.id.adsPainel);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        adsPainel.loadAd(adRequest);
-    }
-    private void closeAds() {
-        btnCloseAds.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                adsPainel.setVisibility(View.GONE);
-                btnCloseAds.setVisibility(View.GONE);
             }
         });
     }

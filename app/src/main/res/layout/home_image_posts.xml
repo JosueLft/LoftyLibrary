@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -10,167 +11,120 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/colored_border"
-        android:elevation="6dp"
+        android:elevation="60dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.cardview.widget.CardView
-            style="@style/CardView.Dark"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:layout_margin="8dp"
-            app:cardCornerRadius="15dp"
-            >
+            android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/workCover"
+            <androidx.cardview.widget.CardView
+                style="@style/CardView.Dark"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/gradient"
-                android:contentDescription="TODO"
-                android:scaleType="fitXY"
-                android:src="#88888888" />
+                android:layout_height="325dp"
+                android:foregroundGravity="center"
+                app:cardCornerRadius="15dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-        </androidx.cardview.widget.CardView>
+                <ImageView
+                    android:id="@+id/workCover"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@string/chapterDescription"
+                    android:foreground="@drawable/image_work_home"
+                    android:scaleType="fitXY" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="12dp"
-            android:layout_marginEnd="12dp"
-            android:layout_marginRight="12dp"
-            android:layout_marginBottom="4dp"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/txtDateChapter"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:gravity="center|clip_vertical"
-                android:text="@string/txtDateChapter"
-                android:textAlignment="viewEnd"
-                android:textSize="10sp" />
-
-            <TextView
-                android:id="@+id/txtPostTitle"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="2"
-                android:gravity="center_vertical"
-                android:text="@string/txtWorkTitle"
-                android:textAlignment="center"
-                android:textColor="@color/colorAccent"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="0"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/txtGenre"
-                    android:layout_width="150px"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="25px"
-                    android:layout_marginBottom="5px"
-                    android:layout_weight="3"
-                    android:background="@drawable/chapter_border"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="5px"
-                    android:paddingTop="25px"
-                    android:paddingRight="5px"
-                    android:paddingBottom="25px"
-                    android:text="@string/txtChapterTitle"
-                    android:textAlignment="center"
-                    android:textColor="@color/txtColor"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
+                    android:layout_gravity="bottom|center"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginEnd="12dp"
+                    android:layout_marginRight="12dp"
+                    android:layout_marginBottom="4dp"
+                    android:gravity="center"
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/txtGenre2"
-                    android:layout_width="150px"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="25px"
-                    android:layout_marginBottom="5px"
-                    android:layout_weight="3"
-                    android:background="@drawable/chapter_border"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="5px"
-                    android:paddingTop="25px"
-                    android:paddingRight="5px"
-                    android:paddingBottom="25px"
-                    android:text="@string/txtChapterTitle"
-                    android:textAlignment="center"
-                    android:textColor="@color/txtColor"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/txtPostTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:gravity="center|center_vertical"
+                        android:text="@string/txtWorkTitle"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/txtGenre3"
-                    android:layout_width="150px"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="25px"
-                    android:layout_marginBottom="5px"
-                    android:layout_weight="3"
-                    android:background="@drawable/chapter_border"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="5px"
-                    android:paddingTop="25px"
-                    android:paddingRight="5px"
-                    android:paddingBottom="25px"
-                    android:text="@string/txtChapterTitle"
-                    android:textAlignment="center"
-                    android:textColor="@color/txtColor"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
+                    <View
+                        android:id="@+id/divider3"
+                        android:layout_width="300dp"
+                        android:layout_height="2dp"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="5dp"
+                        android:background="@drawable/chapter_border"
+                        android:paddingLeft="25dp"
+                        android:paddingRight="25dp" />
 
-                <TextView
-                    android:id="@+id/txtGenre4"
-                    android:layout_width="150px"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="25px"
-                    android:layout_marginBottom="5px"
-                    android:layout_weight="3"
-                    android:background="@drawable/chapter_border"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="5px"
-                    android:paddingTop="25px"
-                    android:paddingRight="5px"
-                    android:paddingBottom="25px"
-                    android:text="@string/txtChapterTitle"
-                    android:textAlignment="center"
-                    android:textColor="@color/txtColor"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/txtDateChapter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0"
+                        android:gravity="center|center_vertical"
+                        android:text="@string/txtDateChapter"
+                        android:textSize="12sp" />
 
-                <TextView
-                    android:id="@+id/txtGenre5"
-                    android:layout_width="150px"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="25px"
-                    android:layout_marginBottom="5px"
-                    android:layout_weight="3"
-                    android:background="@drawable/chapter_border"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="5px"
-                    android:paddingTop="25px"
-                    android:paddingRight="5px"
-                    android:paddingBottom="25px"
-                    android:text="@string/txtChapterTitle"
-                    android:textAlignment="center"
-                    android:textColor="@color/txtColor"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
+                    <View
+                        android:id="@+id/divider4"
+                        android:layout_width="300dp"
+                        android:layout_height="2dp"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="5dp"
+                        android:background="@drawable/chapter_border"
+                        android:paddingLeft="25dp"
+                        android:paddingTop="25dp"
+                        android:paddingRight="25dp" />
 
-        </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:layout_weight="0"
+                        android:gravity="center|center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/txtChapterTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/chapter_border"
+                            android:gravity="center|center_vertical"
+                            android:paddingLeft="5dp"
+                            android:paddingTop="5dp"
+                            android:paddingRight="5dp"
+                            android:paddingBottom="5dp"
+                            android:text="@string/txtChapterTitle"
+                            android:textAlignment="center"
+                            android:textColor="@color/txtColor"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>
 

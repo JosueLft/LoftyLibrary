@@ -57,17 +57,12 @@ public class ReadNovelActivity extends AppCompatActivity {
     // Firebase
     private DatabaseReference dbReference;
 
-    // Google AdMob
-    private Button btnCloseAds;
-    private AdView adsPainel;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_read_novel);
 
         initializeComponents();
-        closeAds();
         receivingChapter();
         loadContent(chapterTitle);
         nextChapter();
@@ -83,13 +78,6 @@ public class ReadNovelActivity extends AppCompatActivity {
         btnNextChapter = findViewById(R.id.btnNextChapter);
         btnPreviousChapter = findViewById(R.id.btnPreviousChapter);
         btnAddLibrary = findViewById(R.id.btnAddLibrary);
-
-        // Google AdMob
-        btnCloseAds = findViewById(R.id.btnCloseAds);
-        adsPainel = new AdView(this);
-        adsPainel.setAdSize(AdSize.BANNER);
-        adsPainel.setAdUnitId("ca-app-pub-3940256099942544/6300978111");
-        initAdMob();
     }
 
     private void receivingChapter() {
@@ -127,14 +115,13 @@ public class ReadNovelActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 chapters.clear();
                 for (DataSnapshot data : dataSnapshot.getChildren()) {
-                    if (!(data.getKey().equalsIgnoreCase("cover")) && !(data.getKey().equalsIgnoreCase("currentDate"))) {
+                    if (!(data.getKey().equalsIgnoreCase("cover")) && !(data.getKey().equalsIgnoreCase("currentDate")) && !data.getKey().equalsIgnoreCase("date")) {
                         chapters.add(new NovelChapter(data.getKey()));
                     }
                 }
                 for(int i = 0; i < chapters.size(); i++) {
                     if(chapters.get(i).getChapterTitle().equals(chapterTitle)) {
                         chapterIndex = i;
-                        Toast.makeText(ReadNovelActivity.this, "indice: " + chapterIndex, Toast.LENGTH_LONG).show();
                     }
                 }
                 if(chapterIndex == (chapters.size() + 1)) {
@@ -245,26 +232,6 @@ public class ReadNovelActivity extends AppCompatActivity {
                     });
 
                 }
-            }
-        });
-    }
-
-    private void initAdMob() {
-        MobileAds.initialize(this, new OnInitializationCompleteListener() {
-            @Override
-            public void onInitializationComplete(InitializationStatus initializationStatus) {
-            }
-        });
-        adsPainel = findViewById(R.id.adsPainel);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        adsPainel.loadAd(adRequest);
-    }
-    private void closeAds() {
-        btnCloseAds.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                adsPainel.setVisibility(View.GONE);
-                btnCloseAds.setVisibility(View.GONE);
             }
         });
     }

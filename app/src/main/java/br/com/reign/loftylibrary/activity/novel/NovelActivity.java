@@ -37,12 +37,8 @@ import br.com.reign.loftylibrary.R;
 import br.com.reign.loftylibrary.activity.catalog.CatalogActivity;
 import br.com.reign.loftylibrary.activity.library.LibraryActivity;
 import br.com.reign.loftylibrary.activity.manga.MangaActivity;
-import br.com.reign.loftylibrary.activity.manga.ReadMangaActivity;
 import br.com.reign.loftylibrary.activity.settings.SettingsActivity;
 import br.com.reign.loftylibrary.adapter.HomePostAdapter;
-import br.com.reign.loftylibrary.controller.Comunication;
-import br.com.reign.loftylibrary.fragments.novels.NovelsFragment;
-import br.com.reign.loftylibrary.model.MangaChapter;
 import br.com.reign.loftylibrary.model.NovelChapter;
 import br.com.reign.loftylibrary.model.Post;
 import br.com.reign.loftylibrary.utils.CompareChapterByDate;
@@ -71,9 +67,6 @@ public class NovelActivity extends AppCompatActivity {
     private TextView txtSettingsIcon;
     private ImageView imgSettingsIcon;
     private List<TextView> components = new ArrayList<>();
-    // Google AdMob
-    private Button btnCloseAds;
-    private AdView adsPainel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,8 +81,6 @@ public class NovelActivity extends AppCompatActivity {
         openSettings();
         menu.selectMenu(txtNovelsIcon, components);
         readChapter();
-        closeAds();
-        initAdMob();
     }
 
     private void initializeComponents() {
@@ -114,12 +105,6 @@ public class NovelActivity extends AppCompatActivity {
         adapter = new HomePostAdapter(postItems, getApplicationContext(), layout);
 
         recyclerPost.setAdapter(adapter);
-
-        // Google AdMob
-        btnCloseAds = findViewById(R.id.btnCloseAds);
-        adsPainel = new AdView(this);
-        adsPainel.setAdSize(AdSize.BANNER);
-        adsPainel.setAdUnitId("ca-app-pub-9527989571520943/7257308806");
     }
 
     private void loadContent() {
@@ -135,7 +120,7 @@ public class NovelActivity extends AppCompatActivity {
                     novel.setWorkTitle(novels.getKey());
                     novel.setCover(String.valueOf(novels.child("cover").getValue()));
                     for(DataSnapshot chapter : novels.getChildren()) {
-                        if(!chapter.getKey().equalsIgnoreCase("cover") && !chapter.getKey().equalsIgnoreCase("currentDate")) {
+                        if(!chapter.getKey().equalsIgnoreCase("cover") && !chapter.getKey().equalsIgnoreCase("currentDate") && !chapter.getKey().equalsIgnoreCase("date")) {
                             novel.setChapterTitle(chapter.getKey());
                             if(!(chapter.child("currentDate").getValue() == null) && !(chapter.child("currentDate").getValue().equals(""))) {
                                 novel.setDate(Long.parseLong(String.valueOf(chapter.child("currentDate").getValue())));
@@ -229,26 +214,6 @@ public class NovelActivity extends AppCompatActivity {
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 menu.selectMenu(txtSettingsIcon, components);
-            }
-        });
-    }
-
-    private void initAdMob() {
-        MobileAds.initialize(this, new OnInitializationCompleteListener() {
-            @Override
-            public void onInitializationComplete(InitializationStatus initializationStatus) {
-            }
-        });
-        adsPainel = findViewById(R.id.adsPainel);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        adsPainel.loadAd(adRequest);
-    }
-    private void closeAds() {
-        btnCloseAds.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                adsPainel.setVisibility(View.GONE);
-                btnCloseAds.setVisibility(View.GONE);
             }
         });
     }

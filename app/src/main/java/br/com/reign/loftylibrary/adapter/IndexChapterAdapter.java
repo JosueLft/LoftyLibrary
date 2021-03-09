@@ -14,9 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import br.com.reign.loftylibrary.R;
-import br.com.reign.loftylibrary.helper.ChaptersDAO;
 import br.com.reign.loftylibrary.model.Chapter;
-import br.com.reign.loftylibrary.model.MangaChapter;
 
 public class IndexChapterAdapter extends RecyclerView.Adapter<IndexChapterAdapter.ViewHolder> {
 

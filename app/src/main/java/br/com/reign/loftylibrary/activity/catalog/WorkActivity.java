@@ -26,6 +26,7 @@ import java.util.ArrayList;
 
 import br.com.reign.loftylibrary.R;
 import br.com.reign.loftylibrary.activity.manga.ReadMangaActivity;
+import br.com.reign.loftylibrary.activity.novel.ReadNovelActivity;
 import br.com.reign.loftylibrary.adapter.IndexChapterAdapter;
 import br.com.reign.loftylibrary.model.Chapter;
 import br.com.reign.loftylibrary.model.MangaChapter;
@@ -179,7 +180,12 @@ public class WorkActivity extends AppCompatActivity {
                     public void onItemClick(View view, int position) {
                         IndexChapterAdapter.ViewHolder holder = new IndexChapterAdapter.ViewHolder(view);
                         String chapterTitle = String.valueOf(holder.getTxtWorkChapterTitle().getText());
-                        Intent intent = new Intent(WorkActivity.this, ReadMangaActivity.class);
+                        Intent intent;
+                        if(workType.equals("mangas")) {
+                            intent = new Intent(WorkActivity.this, ReadMangaActivity.class);
+                        } else {
+                            intent = new Intent(WorkActivity.this, ReadNovelActivity.class);
+                        }
                         intent.putExtra("WorkTitle", workTitle);
                         intent.putExtra("ChapterTitle", chapterTitle);
                         startActivity(intent);

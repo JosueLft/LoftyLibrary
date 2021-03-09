@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Lofty Library 2.0</string>
+    <string name="app_name">Lofty Library</string>
 
     <!-- Main Activity Menu Icons -->
     <string name="txtNovelsIcon">Novels</string>
@@ -48,5 +48,16 @@
     <string name="btnRegister">Cadastrar</string>
     <string name="btnImage">Foto</string>
     <string name="txtLogout">Sair</string>
+    <string name="imagePosts">Capa</string>
+    <string name="chapterDescription">Chapter Title</string>
+
+    <!-- Info Frame -->
+    <string name="txtInfoTitle">Informações</string>
+    <string name="txtZoom">Zoom</string>
+    <string name="txtApplyZoom">Aplicar: </string>
+    <string name="txtApplyZoomDescription">Para aplicar o zoom pressione rapidamente uma vez a tela!</string>
+    <string name="txtRemoveZoom">Remover: </string>
+    <string name="txtRemoveZoomDescription">Para remover o zoom mantenha pressionado sobre a tela!</string>
+    <string name="txtReportChapter">Reportar Capitulo</string>
 
 </resources>

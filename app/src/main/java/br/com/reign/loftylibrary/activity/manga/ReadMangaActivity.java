@@ -3,6 +3,7 @@ package br.com.reign.loftylibrary.activity.manga;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -12,6 +13,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +38,7 @@ import java.util.ArrayList;
 import br.com.reign.loftylibrary.R;
 import br.com.reign.loftylibrary.activity.account.LoginActivity;
 import br.com.reign.loftylibrary.adapter.MangaChapterAdapter;
+import br.com.reign.loftylibrary.fragments.InfoFragment;
 import br.com.reign.loftylibrary.model.MangaChapter;
 import br.com.reign.loftylibrary.utils.RecyclerItemClickListener;
 import br.com.reign.loftylibrary.utils.SortPages;
@@ -52,15 +55,17 @@ public class ReadMangaActivity extends AppCompatActivity {
     private Button btnNextChapter;
     private Button btnPreviousChapter;
     private Button btnAddLibrary;
+    private Button btnInfo;
     private TextView txtCurrentChapterTitle;
     private int chapterIndex;
+    private FrameLayout frameInfo;
     // Firebase
     private DatabaseReference dbReference;
-    // Google AdMob
-    private Button btnCloseAds;
-    private AdView adsPainel;
     //  zoom variables
     private float originalScaleX, originalScaleY;
+    // Fragment
+    private InfoFragment infoFragment;
+    private Button btnCloseInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,13 +73,31 @@ public class ReadMangaActivity extends AppCompatActivity {
         setContentView(R.layout.activity_read_manga);
 
         initializeComponents();
-        closeAds();
-        initAdMob();
         receivingChapter();
         loadContent(chapterTitle);
         nextChapter();
         addLibrary();
         zoom();
+        info();
+    }
+
+    private void info() {
+        btnInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                frameInfo.setVisibility(View.VISIBLE);
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.frameInfo, infoFragment);
+                transaction.commit();
+            }
+        });
+
+        btnCloseInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                frameInfo.setVisibility(View.GONE);
+            }
+        });
     }
 
     private void initializeComponents() {
@@ -89,12 +112,11 @@ public class ReadMangaActivity extends AppCompatActivity {
         btnNextChapter = findViewById(R.id.btnNextChapter);
         btnPreviousChapter = findViewById(R.id.btnPreviousChapter);
         btnAddLibrary = findViewById(R.id.btnAddLibrary);
-
-        // Google AdMob
-        btnCloseAds = findViewById(R.id.btnCloseAds);
-        adsPainel = new AdView(this);
-        adsPainel.setAdSize(AdSize.BANNER);
-        adsPainel.setAdUnitId("ca-app-pub-2875078029151249/7996416031");
+        btnInfo = findViewById(R.id.btnInfo);
+        // Views
+        frameInfo = findViewById(R.id.frameInfo);
+        infoFragment = new InfoFragment();
+        btnCloseInfo = findViewById(R.id.btnCloseInfo);
     }
 
     private void receivingChapter() {
@@ -116,7 +138,7 @@ public class ReadMangaActivity extends AppCompatActivity {
                 chapterPages.clear();
                 SortPages compare = new SortPages();
                 for(DataSnapshot data : dataSnapshot.getChildren()) {
-                    if(!(data.getKey().equalsIgnoreCase("currentDate"))) {
+                    if(!(data.getKey().equalsIgnoreCase("currentDate")) && !data.getKey().equalsIgnoreCase("date")) {
                         chapterPages.add(new MangaChapter(Integer.parseInt(String.valueOf(data.getKey())), String.valueOf(data.getValue())));
                         chapterPages.sort(compare);
                     }
@@ -142,7 +164,7 @@ public class ReadMangaActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 chapters.clear();
                 for(DataSnapshot data : dataSnapshot.getChildren()) {
-                    if(!(data.getKey().equalsIgnoreCase("cover")) && !(data.getKey().equalsIgnoreCase("currentDate"))) {
+                    if(!(data.getKey().equalsIgnoreCase("cover")) && !(data.getKey().equalsIgnoreCase("currentDate")) && !data.getKey().equalsIgnoreCase("date")) {
                         chapters.add(new MangaChapter(data.getKey()));
                     }
                 }
@@ -274,8 +296,13 @@ public class ReadMangaActivity extends AppCompatActivity {
                 new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        rvMangaContent.setScaleX((float) (rvMangaContent.getScaleX() + 0.2));
-                        rvMangaContent.setScaleY((float) (rvMangaContent.getScaleY() + 0.2));
+                        if((rvMangaContent.getScaleX() >= (originalScaleX * 3)) &&  (rvMangaContent.getScaleY() >= (originalScaleY * 3))) {
+                            rvMangaContent.setScaleX(originalScaleX);
+                            rvMangaContent.setScaleY(originalScaleY);
+                        } else {
+                            rvMangaContent.setScaleX((float) (rvMangaContent.getScaleX() + 0.2));
+                            rvMangaContent.setScaleY((float) (rvMangaContent.getScaleY() + 0.2));
+                        }
                     }
 
                     @Override
@@ -290,25 +317,5 @@ public class ReadMangaActivity extends AppCompatActivity {
                     }
                 }
         ));
-    }
-
-    private void initAdMob() {
-        MobileAds.initialize(this, new OnInitializationCompleteListener() {
-            @Override
-            public void onInitializationComplete(InitializationStatus initializationStatus) {
-            }
-        });
-        adsPainel = findViewById(R.id.adsPainel);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        adsPainel.loadAd(adRequest);
-    }
-    private void closeAds() {
-        btnCloseAds.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                adsPainel.setVisibility(View.GONE);
-                btnCloseAds.setVisibility(View.GONE);
-            }
-        });
     }
 }

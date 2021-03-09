@@ -1,11 +1,9 @@
 package br.com.reign.loftylibrary.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,7 +21,6 @@ public class HomePostAdapter extends RecyclerView.Adapter<HomePostAdapter.ViewHo
 
     private List<Post> listPost;
     private Context context;
-
     private String layout;
 
     public HomePostAdapter(List<Post> listPosts, Context context, String layout) {
@@ -35,25 +32,13 @@ public class HomePostAdapter extends RecyclerView.Adapter<HomePostAdapter.ViewHo
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemList = null;
-        if(layout.equalsIgnoreCase("Painel")) {
-            itemList = LayoutInflater
-                    .from(parent.getContext())
-                    .inflate(
-                            R.layout.home_list_posts,
-                            parent,
-                            false
-                    );
-        } else if(layout.equalsIgnoreCase("Card")) {
-            itemList = LayoutInflater
-                    .from(parent.getContext())
-                    .inflate(
-                            R.layout.home_image_posts,
-                            parent,
-                            false
-                    );
-
-        }
+        View itemList = LayoutInflater
+                .from(parent.getContext())
+                .inflate(
+                        R.layout.home_image_posts,
+                        parent,
+                        false
+                );
         return new ViewHolder(itemList);
     }
 
@@ -71,8 +56,7 @@ public class HomePostAdapter extends RecyclerView.Adapter<HomePostAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-        Log.i("Conta", "Resultado: " + (listPost.size() - (listPost.size() * 97/100)));
-        return listPost.size() - (listPost.size() * 97/100);
+        return listPost.size();
     }
 
     //criando uma inner class
@@ -86,7 +70,7 @@ public class HomePostAdapter extends RecyclerView.Adapter<HomePostAdapter.ViewHo
         public ViewHolder(View itemView ) {
             super(itemView);
             txtPostTitle = itemView.findViewById(R.id.txtPostTitle);
-            txtChapterTitle = itemView.findViewById(R.id.txtGenre);
+            txtChapterTitle = itemView.findViewById(R.id.txtChapterTitle);
             workCover = itemView.findViewById(R.id.workCover);
             txtDateChapter = itemView.findViewById(R.id.txtDateChapter);
         }

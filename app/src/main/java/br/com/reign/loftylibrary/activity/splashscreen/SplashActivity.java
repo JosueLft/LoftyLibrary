@@ -1,11 +1,16 @@
 package br.com.reign.loftylibrary.activity.splashscreen;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.WindowManager;
@@ -13,9 +18,25 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import br.com.reign.loftylibrary.R;
 import br.com.reign.loftylibrary.activity.manga.MangaActivity;
+import br.com.reign.loftylibrary.adapter.HomePostAdapter;
+import br.com.reign.loftylibrary.model.MangaChapter;
+import br.com.reign.loftylibrary.model.Post;
+import br.com.reign.loftylibrary.model.User;
+import br.com.reign.loftylibrary.utils.CompareChapterByDate;
+import br.com.reign.loftylibrary.utils.MenuSelect;
 
 public class SplashActivity extends AppCompatActivity {
     //initialize variable
@@ -25,6 +46,12 @@ public class SplashActivity extends AppCompatActivity {
     int index;
     long delay = 200;
     Handler handler = new Handler();
+
+    private HomePostAdapter adapter;
+    private ArrayList<Post> postItems = new ArrayList<>();
+    private DatabaseReference dbProject;
+    private DatabaseReference dbReference = FirebaseDatabase.getInstance().getReference();
+    private ValueEventListener listenerMangas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +64,8 @@ public class SplashActivity extends AppCompatActivity {
         ivWave = findViewById(R.id.iv_wave);
         ivBottom = findViewById(R.id.iv_bottom);
         appName = findViewById(R.id.app_name);
+        initializeComponentes();
+        loadContent();
 
         // Set full screen
         getWindow().setFlags(
@@ -85,7 +114,7 @@ public class SplashActivity extends AppCompatActivity {
                 //Finish activity
                 finish();
             }
-        }, 4000);
+        }, 5000);
     }
 
     Runnable runnable = new Runnable() {
@@ -115,5 +144,44 @@ public class SplashActivity extends AppCompatActivity {
         handler.removeCallbacks(runnable);
         //Run Handler
         handler.postDelayed(runnable, delay);
+    }
+
+    private void initializeComponentes() {
+        // Adapters
+        adapter = new HomePostAdapter(postItems, getApplicationContext(), "Card");
+    }
+
+    private void loadContent() {
+        dbProject = dbReference.child("chapters").child("mangas");
+        listenerMangas = new ValueEventListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                postItems.clear();
+                CompareChapterByDate compare = new CompareChapterByDate();
+                for(DataSnapshot mangas : dataSnapshot.getChildren()) {
+                    MangaChapter manga = mangas.getValue(MangaChapter.class);
+                    manga.setWorkTitle(mangas.getKey());
+                    manga.setCover(String.valueOf(mangas.child("cover").getValue()));
+                    for(DataSnapshot chapter : mangas.getChildren()) {
+                        if(!chapter.getKey().equalsIgnoreCase("cover") && !chapter.getKey().equalsIgnoreCase("currentDate")) {
+                            manga.setChapterTitle(chapter.getKey());
+                            if(!(chapter.child("currentDate").getValue() == null) && !(chapter.child("currentDate").getValue().equals(""))) {
+                                manga.setDate(Long.parseLong(String.valueOf(chapter.child("currentDate").getValue())));
+                            }
+                            postItems.add(new Post(manga.getWorkTitle(), manga.getChapterTitle(), manga.getCover(), manga.getDate()));
+                            postItems.sort(compare);
+                        }
+                    }
+                }
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(getApplicationContext(), databaseError.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        };
+        dbProject.addValueEventListener(listenerMangas);
     }
 }

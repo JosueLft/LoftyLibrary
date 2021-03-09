@@ -30,6 +30,8 @@ import com.squareup.picasso.Picasso;
 import com.xwray.groupie.GroupieAdapter;
 import com.xwray.groupie.GroupieViewHolder;
 import com.xwray.groupie.Item;
+import com.xwray.groupie.OnItemClickListener;
+import com.xwray.groupie.OnItemLongClickListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -38,7 +40,9 @@ import java.util.List;
 import br.com.reign.loftylibrary.R;
 import br.com.reign.loftylibrary.activity.account.LoginActivity;
 import br.com.reign.loftylibrary.activity.catalog.CatalogActivity;
+import br.com.reign.loftylibrary.activity.catalog.WorkActivity;
 import br.com.reign.loftylibrary.activity.manga.MangaActivity;
+import br.com.reign.loftylibrary.activity.manga.ReadMangaActivity;
 import br.com.reign.loftylibrary.activity.novel.NovelActivity;
 import br.com.reign.loftylibrary.activity.settings.SettingsActivity;
 import br.com.reign.loftylibrary.model.Chapter;
@@ -64,9 +68,6 @@ public class LibraryActivity extends AppCompatActivity {
     private ImageView imgSettingsIcon;
     MenuSelect menu = new MenuSelect();
     private List<TextView> components = new ArrayList<>();
-    // Google AdMob
-    private Button btnCloseAds;
-    private AdView adsPainel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,13 +77,36 @@ public class LibraryActivity extends AppCompatActivity {
         verifyAuthentication();
         initializeComponents();
         fetchLibrary();
-        closeAds();
-        initAdMob();
         openMangas();
         openNovels();
         openCatalog();
         openSettings();
         menu.selectMenu(txtLibraryIcon, components);
+        readChapter();
+    }
+
+    private void readChapter() {
+        adapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(@NonNull Item item, @NonNull View view) {
+                Intent intent = new Intent(LibraryActivity.this, ReadMangaActivity.class);
+                LibraryItem libraryItem = (LibraryItem) item;
+                intent.putExtra("WorkTitle", libraryItem.chapter.getWorkTitle());
+                intent.putExtra("ChapterTitle", libraryItem.chapter.getChapterTitle());
+                startActivity(intent);
+            }
+        });
+        adapter.setOnItemLongClickListener(new OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(@NonNull Item item, @NonNull View view) {
+                Intent intent = new Intent(LibraryActivity.this, WorkActivity.class);
+                LibraryItem libraryItem = (LibraryItem) item;
+                intent.putExtra("WorkTitle", libraryItem.chapter.getWorkTitle());
+                intent.putExtra("Category", "mangas");
+                startActivity(intent);
+                return false;
+            }
+        });
     }
 
     private void fetchLibrary() {
@@ -139,12 +163,6 @@ public class LibraryActivity extends AppCompatActivity {
         rvLastChapters = findViewById(R.id.rvLastChapters);
         rvLastChapters.setAdapter(adapter);
         rvLastChapters.setLayoutManager(new LinearLayoutManager(this));
-
-        // Google AdMob
-        btnCloseAds = findViewById(R.id.btnCloseAds);
-        adsPainel = new AdView(this);
-        adsPainel.setAdSize(AdSize.BANNER);
-        adsPainel.setAdUnitId("ca-app-pub-9527989571520943/7257308806");
     }
 
     private class LibraryItem extends Item<GroupieViewHolder> {
@@ -174,7 +192,7 @@ public class LibraryActivity extends AppCompatActivity {
 
         @Override
         public int getLayout() {
-            return R.layout.home_list_posts;
+            return R.layout.library_work;
         }
     }
 
@@ -219,26 +237,6 @@ public class LibraryActivity extends AppCompatActivity {
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 menu.selectMenu(txtSettingsIcon, components);
-            }
-        });
-    }
-
-    private void initAdMob() {
-        MobileAds.initialize(this, new OnInitializationCompleteListener() {
-            @Override
-            public void onInitializationComplete(InitializationStatus initializationStatus) {
-            }
-        });
-        adsPainel = findViewById(R.id.adsPainel);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        adsPainel.loadAd(adRequest);
-    }
-    private void closeAds() {
-        btnCloseAds.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                adsPainel.setVisibility(View.GONE);
-                btnCloseAds.setVisibility(View.GONE);
             }
         });
     }

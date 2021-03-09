@@ -14,12 +14,11 @@
         android:layout_marginStart="12dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="12dp"
-        android:layout_marginBottom="12dp"
         android:gravity="center"
         android:text="@string/txtLibraryEmpty"
         android:textColor="@color/colorAccent"
         android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -28,7 +27,9 @@
         android:id="@+id/txtFollowing"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="12dp"
         android:text="@string/txtFollowingLibrary"
         android:textAlignment="center"
         android:textColor="@color/colorAccent"
@@ -41,46 +42,18 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvLastChapters"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="12dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="12dp"
-        android:layout_marginBottom="12dp"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/txtFollowing"
+        app:layout_constraintStart_toStartOf="@+id/txtFollowing"
         app:layout_constraintTop_toBottomOf="@+id/txtFollowing">
 
     </androidx.recyclerview.widget.RecyclerView>
-
-    <LinearLayout
-        android:id="@+id/linearLayout3"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <Button
-            android:id="@+id/btnCloseAds"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginStart="15dp"
-            android:background="@drawable/ic_close_ad" />
-
-        <com.google.android.gms.ads.AdView
-            android:id="@+id/adsPainel"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="12dp"
-            android:layout_marginEnd="12dp"
-            app:adSize="BANNER"
-            app:adUnitId="ca-app-pub-9527989571520943/7257308806">
-        </com.google.android.gms.ads.AdView>
-    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout"

@@ -43,9 +43,6 @@ public class SettingsActivity extends AppCompatActivity {
     private ImageView imgSettingsIcon;
     MenuSelect menu = new MenuSelect();
     private List<TextView> components = new ArrayList<>();
-    // Google AdMob
-    private Button btnCloseAds;
-    private AdView adsPainel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,8 +51,6 @@ public class SettingsActivity extends AppCompatActivity {
 
         verifyAuthentication();
         initializeComponents();
-        closeAds();
-        initAdMob();
         openMangas();
         openNovels();
         openCatalog();
@@ -98,12 +93,6 @@ public class SettingsActivity extends AppCompatActivity {
         imgCatalogIcon = findViewById(R.id.imgCatalogIcon);
         imgLibraryIcon = findViewById(R.id.imgLibraryIcon);
         imgSettingsIcon = findViewById(R.id.imgSettingsIcon);
-
-        // Google AdMob
-        btnCloseAds = findViewById(R.id.btnCloseAds);
-        adsPainel = new AdView(this);
-        adsPainel.setAdSize(AdSize.BANNER);
-        adsPainel.setAdUnitId("ca-app-pub-9527989571520943/7257308806");
     }
 
     private void openMangas() {
@@ -147,26 +136,6 @@ public class SettingsActivity extends AppCompatActivity {
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 menu.selectMenu(txtLibraryIcon, components);
-            }
-        });
-    }
-
-    private void initAdMob() {
-        MobileAds.initialize(this, new OnInitializationCompleteListener() {
-            @Override
-            public void onInitializationComplete(InitializationStatus initializationStatus) {
-            }
-        });
-        adsPainel = findViewById(R.id.adsPainel);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        adsPainel.loadAd(adRequest);
-    }
-    private void closeAds() {
-        btnCloseAds.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                adsPainel.setVisibility(View.GONE);
-                btnCloseAds.setVisibility(View.GONE);
             }
         });
     }

@@ -26,7 +26,6 @@ public class MangaChapter extends Chapter {
     @Override
     public String toString() {
         return "\n" + "work_name: " + getWorkTitle() + "\n" +
-                "work_cover: " + getCover() + "\n" +
                 "Chapter Title: " + getChapterTitle() + "\n" +
                 "current_date: " + getDate() + "\n";
     }

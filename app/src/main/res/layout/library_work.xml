@@ -18,9 +18,8 @@
             android:id="@+id/workCoverLibrary"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:contentDescription="TODO"
-            android:scaleType="fitXY"
-            app:srcCompat="@drawable/kog" />
+            android:contentDescription="@string/btnImage"
+            android:scaleType="fitXY" />
     </androidx.cardview.widget.CardView>
 
     <LinearLayout
